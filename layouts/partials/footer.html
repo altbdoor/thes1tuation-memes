@@ -1,0 +1,9 @@
+<hr>
+
+<ul class="list-inline">
+    {{ range $.Site.Data.credits }}
+    <li class="list-inline-item">
+        <a href="{{ .link }}">{{ .name }}</a>
+    </li>
+    {{ end }}
+</ul>

@@ -1,0 +1,80 @@
+{{ range $groupIndex, $datum := $.Site.Data.imgur }}
+{{ $isFirst := cond (eq ($groupIndex) 0) "" " mt-4" }}
+<h4 class="{{ $isFirst }}">{{ $datum.name }}</h4>
+<div class="row">
+    {{ range $datum.items }}
+
+    {{ $timeDisplay := .datetime | int | dateFormat "Jan 2, 3:04 PM" }}
+    {{ $tags := index (index $.Site.Data "imgur-tags") .id | default (slice) }}
+    {{ if strings.HasSuffix .link ".gif" }}
+        {{ $tags = $tags | append "gif" }}
+    {{ end }}
+
+    <div class="col-md-6 col-lg-4 mt-2">
+        <div class="card card-body p-2">
+            <div class="d-flex">
+                <a
+                    href="{{ .link }}"
+                    rel="noopener noreferrer"
+                    data-title="{{ $timeDisplay }} - {{ delimit $tags ", " }}"
+                    data-gallery-id="{{ .id }}"
+                >
+                    <img class="mr-2" src="{{ .thumbnail }}" width="120" height="120" loading="lazy" alt="{{ .id }}">
+                </a>
+                <div>
+                    <div class="mb-1">
+                        <strong>{{ $timeDisplay }}</strong>
+                    </div>
+                    <div class="mb-1">
+                        {{ range $tags }}
+                        <span class="badge badge-secondary">{{ . }}</span>
+                        {{ end }}
+                    </div>
+                    <p>
+                        <a
+                            href="{{ .link }}"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            Open image in new tab
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ end }}
+</div>
+{{ end }}
+
+<div class="blueimp-gallery blueimp-gallery-controls" aria-label="image gallery" aria-modal="true" role="dialog">
+    <div class="slides" aria-live="polite"></div>
+    <h3 class="title"></h3>
+    <a class="prev" aria-controls="blueimp-gallery" aria-label="previous slide" aria-keyshortcuts="ArrowLeft"></a>
+    <a class="next" aria-controls="blueimp-gallery" aria-label="next slide" aria-keyshortcuts="ArrowRight"></a>
+    <a class="close" aria-controls="blueimp-gallery" aria-label="close" aria-keyshortcuts="Escape"></a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/js/blueimp-gallery.min.js"></script>
+<script>
+    const allLinks = [...document.querySelectorAll(".card-body > div > a")];
+
+    allLinks.forEach((elem) => {
+        elem.addEventListener(
+            "click",
+            (evt) => {
+                const id = evt.target.closest("a").getAttribute('data-gallery-id');
+                const index = allLinks.findIndex((elem) => elem.getAttribute('data-gallery-id') === id);
+
+                blueimp.Gallery(allLinks, {
+                    event: evt,
+                    index,
+                    container: ".blueimp-gallery",
+                    toggleControlsOnEnter: false,
+                    toggleControlsOnSlideClick: false,
+                });
+            },
+            false
+        );
+    });
+</script>

@@ -1,0 +1,6 @@
+<blockquote class="blockquote pl-3">
+    <p class="mb-0">{{ .Inner | markdownify }}</p>
+    <footer class="blockquote-footer">
+        {{ .Get "author" | markdownify }}
+    </footer>
+</blockquote>

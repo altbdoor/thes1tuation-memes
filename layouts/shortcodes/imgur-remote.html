@@ -1,0 +1,14 @@
+<div class="d-flex flex-wrap">
+    {{ $clientId := print "Client-ID " (getenv "CLIENT_ID") }}
+    {{ $apiUrl := "https://api.imgur.com/3/album/yzKq60n/images" }}
+    {{ $imgurData := getJSON $apiUrl (dict "Authorization" $clientId) }}
+
+    {{ range sort $imgurData.data "datetime" "desc" }}
+    {{ $thumbnail := replace .link .id (print .id "b") }}
+    {{ $thumbnail = replace $thumbnail ".gif" ".jpg" }}
+
+    <div class="pr-2 pb-2">
+        <img src="{{ $thumbnail }}" width="120" height="120">
+    </div>
+    {{ end }}
+</div>

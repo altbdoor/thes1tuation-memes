@@ -1,0 +1,32 @@
+baseURL: 'http://altbdoor.github.io/thes1tuation-memes/'
+languageCode: en-us
+title: TheS1tuation memes
+
+disableKinds:
+  - section
+  - taxonomy
+  - term
+  - RSS
+  - sitemap
+  - robotsTXT
+  - '404'
+
+ignoreErrors:
+  - error-disable-taxonomy
+
+# security:
+#   funcs:
+#     getenv:
+#       - CLIENT_ID
+# caches:
+#   getjson:
+#     maxAge: 10m
+#   getcsv:
+#     maxAge: 10m
+#   getresource:
+#     maxAge: 10m
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+timezone: Asia/Kuala_Lumpur

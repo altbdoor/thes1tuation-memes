@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="/ok.png?v=1" type="image/png">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.6.2/dist/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/css/blueimp-gallery.min.css">
+    {{ $sass := resources.Get "main.css" | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $sass.RelPermalink }}">
+
+    <title>{{ .Site.Title }}</title>
+</head>
+
+<body>
+    <div class="container pt-3 py-5">
+        {{ block "main" . }}
+        {{ .Content }}
+        {{ end }}
+    </div>
+</body>
+
+</html>
