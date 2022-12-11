@@ -5,7 +5,9 @@ on:
   push:
     branches:
       - master
-
+  schedule:
+    # 2am GMT+8
+    - cron: '0 18 * * *'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
