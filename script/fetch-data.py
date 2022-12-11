@@ -7,7 +7,7 @@ from typing import TypedDict
 from itertools import groupby
 from datetime import datetime, timezone
 
-client_id = os.getenv("CLIENT_ID")
+client_id = os.getenv("IMGUR_CLIENT_ID")
 album_hash = "yzKq60n"
 current_dir = os.path.dirname(__file__)
 cache_json = os.path.join(current_dir, "cache.json")
