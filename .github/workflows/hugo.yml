@@ -22,6 +22,8 @@ jobs:
 
       - run: |
           python script/fetch-data.py
+        env:
+          IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 
       - uses: peaceiris/actions-hugo@v2
         with:
