@@ -1,3 +1,7 @@
+html {
+    font-size: calc(16 / 0.9375 * 1px);
+}
+
 body {
     overflow-y: scroll;
 }
@@ -8,4 +12,9 @@ hr {
 
 .blockquote {
     border-left: 4px solid var(--success);
+}
+
+.blueimp-gallery {
+    background-color: rgba(17, 17, 17, 0.7);
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0, 0, 0, 0.7) 35px, rgba(0, 0, 0, 0.7) 70px);
 }

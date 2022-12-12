@@ -5,7 +5,8 @@ import os
 import json
 from typing import TypedDict
 from itertools import groupby
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 client_id = os.getenv("IMGUR_CLIENT_ID")
 album_hash = "yzKq60n"
@@ -39,6 +40,8 @@ Image = TypedDict(
         "size": int,
         "link": str,
         "thumbnail": str,
+        "timeDisplay": str,
+        "groupBy": str,
     },
 )
 
@@ -59,17 +62,16 @@ for img in data.get("data", []):
         .replace(remapped_img["id"], remapped_img["id"] + "b")
         .replace(".gif", ".jpg")
     )
+
+    img_datetime = datetime.fromtimestamp(remapped_img["datetime"], ZoneInfo("Asia/Kuala_Lumpur"))
+    remapped_img["timeDisplay"] = img_datetime.strftime("%d %b, %I:%M %p")
+    remapped_img["groupBy"] = img_datetime.strftime("%B %Y")
+
     remapped_data.append(remapped_img)
 
-remapped_data = sorted(remapped_data, key=lambda x: x["datetime"], reverse=True)
-
 with open(imgur_json, "w") as fp:
-    groups = groupby(
-        remapped_data,
-        key=lambda x: datetime.fromtimestamp(x["datetime"], timezone.utc).strftime(
-            "%b %Y"
-        ),
-    )
+    remapped_data = sorted(remapped_data, key=lambda x: x["datetime"], reverse=True)
+    groups = groupby(remapped_data, key=lambda x: x["groupBy"])
 
     group_data = [{"name": key, "items": list(items)} for key, items in groups]
     json.dump(group_data, fp, indent=4)

@@ -4,7 +4,6 @@
 <div class="row">
     {{ range $datum.items }}
 
-    {{ $timeDisplay := .datetime | int | dateFormat "Jan 2, 3:04 PM" }}
     {{ $tags := index (index $.Site.Data "imgur-tags") .id | default (slice) }}
     {{ if strings.HasSuffix .link ".gif" }}
         {{ $tags = $tags | append "gif" }}
@@ -16,14 +15,14 @@
                 <a
                     href="{{ .link }}"
                     rel="noopener noreferrer"
-                    data-title="{{ $timeDisplay }} - {{ delimit $tags ", " }}"
-                    data-gallery-id="{{ .id }}"
+                    data-title="{{ .timeDisplay }} - {{ delimit $tags ", " }}"
+                    data-image-id="{{ .id }}"
                 >
                     <img class="mr-2" src="{{ .thumbnail }}" width="120" height="120" loading="lazy" alt="{{ .id }}">
                 </a>
                 <div>
                     <div class="mb-1">
-                        <strong>{{ $timeDisplay }}</strong>
+                        <strong>{{ .timeDisplay }}</strong>
                     </div>
                     <div class="mb-1">
                         {{ range sort $tags }}
@@ -63,8 +62,8 @@
         elem.addEventListener(
             "click",
             (evt) => {
-                const id = evt.target.closest("a").getAttribute('data-gallery-id');
-                const index = allLinks.findIndex((elem) => elem.getAttribute('data-gallery-id') === id);
+                const id = evt.target.closest("a").getAttribute('data-image-id');
+                const index = allLinks.findIndex((elem) => elem.getAttribute('data-image-id') === id);
 
                 blueimp.Gallery(allLinks, {
                     event: evt,

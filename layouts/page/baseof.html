@@ -8,8 +8,8 @@
     <link rel="shortcut icon" href="{{ relURL "ok.png" }}?v=2" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.6.2/dist/darkly/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/css/blueimp-gallery.min.css">
-    {{ $sass := resources.Get "main.css" | resources.Minify | resources.Fingerprint }}
-    <link rel="stylesheet" href="{{ $sass.RelPermalink }}">
+    {{ $css := resources.Get "main.css" | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 
     <title>{{ .Site.Title }}</title>
 </head>
@@ -20,6 +20,10 @@
         {{ .Content }}
         {{ end }}
     </div>
-</body>
 
+    {{/*
+    {{ $js := resources.Get "main.js" | resources.Minify | resources.Fingerprint }}
+    <script src="{{ $js.RelPermalink }}"></script>
+    */}}
+</body>
 </html>
