@@ -16,9 +16,11 @@
 
 <body>
     <div class="container pt-3 py-5">
+        <h2>TheS1tuation memes</h2>
         {{ block "main" . }}
         {{ .Content }}
         {{ end }}
+        {{ partial "footer.html" . }}
     </div>
 
     {{/*

@@ -28,6 +28,7 @@ jobs:
 
       - run: |
           python script/fetch-imgur-data.py
+          python script/parse-discord-data.py
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 
@@ -36,7 +37,7 @@ jobs:
           hugo-version: '0.108.0'
 
       - run: |
-          hugo --minify
+          hugo -v
 
       - uses: peaceiris/actions-gh-pages@v3
         with:

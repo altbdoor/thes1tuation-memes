@@ -1,0 +1,38 @@
+{{ define "main" }}
+
+<p>
+    All times are recorded in GMT+8. All audio is set to 20% to prevent ear damage.
+    More clips are available in <a href="https://www.twitch.tv/thes1tuation/videos?filter=clips&range=all">Twitch clips</a>.
+</p>
+
+{{ $postList := index $.Site.Data "discord-parsed" }}
+
+{{ range $postIndex, $post := $postList }}
+{{ $isFirst := cond (eq ($postIndex) 0) "" " mt-4" }}
+<h4 class="{{ $isFirst }}">
+    {{ $post.name }}
+    <span class="badge badge-info">{{ len $post.items }}</span>
+</h4>
+{{ range $post.items }}
+<div class="card card-body p-2 mt-2">
+    <strong>{{ .filename }}</strong>
+
+    <div class="mt-1">
+        {{ if strings.HasSuffix .filename ".mp3" }}
+            {{ $path:= print "audio/" .filename }}
+            <audio src="{{ relURL $path }}" preload="metadata" controls></audio>
+        {{ else if strings.HasSuffix .filename ".mp4" }}
+            {{ $path:= print "video/" .filename }}
+            <video src="{{ relURL $path }}" preload="metadata" controls></video>
+        {{ end }}
+    </div>
+</div>
+{{ end }}
+{{ end }}
+
+<script>
+    [...document.querySelectorAll('audio, video')].forEach((elem) => {
+        elem.volume = 0.2;
+    });
+</script>
+{{ end }}

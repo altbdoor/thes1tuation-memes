@@ -11,5 +11,5 @@ Small archive of the memes I made for the very cool dude, [TheS1tuation](https:/
 </div>
 
 - [imgur](./imgur/)
-- Discord soon?
+- [Discord](./discord/)
 - [About](./about/)

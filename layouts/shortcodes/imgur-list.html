@@ -1,6 +1,9 @@
 {{ range $groupIndex, $datum := $.Site.Data.imgur }}
 {{ $isFirst := cond (eq ($groupIndex) 0) "" " mt-4" }}
-<h4 class="{{ $isFirst }}">{{ $datum.name }}</h4>
+<h4 class="{{ $isFirst }}">
+    {{ $datum.name }}
+    <span class="badge badge-info">{{ len $datum.items }}</span>
+</h4>
 <div class="row">
     {{ range $datum.items }}
 

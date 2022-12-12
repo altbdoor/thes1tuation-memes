@@ -18,3 +18,8 @@ hr {
     background-color: rgba(17, 17, 17, 0.7);
     background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0, 0, 0, 0.7) 35px, rgba(0, 0, 0, 0.7) 70px);
 }
+
+video, audio {
+    max-width: 100%;
+    height: auto;
+}

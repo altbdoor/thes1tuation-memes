@@ -17,4 +17,5 @@ hugo.linux
 .hugo_build.lock
 
 data/imgur.json
+data/discord-parsed.json
 script/*.json
