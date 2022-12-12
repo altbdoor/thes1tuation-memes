@@ -27,7 +27,7 @@ jobs:
           python-version: '3.11'
 
       - run: |
-          python script/fetch-data.py
+          python script/fetch-imgur-data.py
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 
