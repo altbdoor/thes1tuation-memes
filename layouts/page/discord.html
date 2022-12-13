@@ -23,7 +23,12 @@
             <audio src="{{ relURL $path }}" preload="metadata" controls></audio>
         {{ else if strings.HasSuffix .filename ".mp4" }}
             {{ $path:= print "video/" .filename }}
-            <video src="{{ relURL $path }}" preload="metadata" controls></video>
+            <video
+                src="{{ relURL $path }}#t=0.1"
+                preload="metadata"
+                controls
+                playsinline
+            ></video>
         {{ end }}
     </div>
 </div>
