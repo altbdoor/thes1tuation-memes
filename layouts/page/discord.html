@@ -20,7 +20,7 @@
     <div class="mt-1">
         {{ if strings.HasSuffix .filename ".mp3" }}
             {{ $path:= print "audio/" .filename }}
-            <audio src="{{ relURL $path }}" preload="metadata" controls></audio>
+            <audio src="{{ relURL $path }}" preload="metadata" controls loop></audio>
         {{ else if strings.HasSuffix .filename ".mp4" }}
             {{ $path:= print "video/" .filename }}
             <video
@@ -28,6 +28,7 @@
                 preload="metadata"
                 controls
                 playsinline
+                loop
             ></video>
         {{ end }}
     </div>
