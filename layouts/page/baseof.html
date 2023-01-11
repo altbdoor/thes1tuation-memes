@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="{{ relURL "ok.png" }}?v=2" type="image/png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.6.2/dist/darkly/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/css/blueimp-gallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     {{ $css := resources.Get "main.css" | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 

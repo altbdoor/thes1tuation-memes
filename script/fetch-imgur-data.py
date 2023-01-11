@@ -15,7 +15,7 @@ cache_json = os.path.join(current_dir, "cache.json")
 imgur_json = os.path.join(current_dir, "../data/imgur.json")
 
 if client_id is None:
-    raise Exception("please provide client id")
+    raise Exception("please provide IMGUR_CLIENT_ID")
 
 req = Request(
     f"https://api.imgur.com/3/album/{album_hash}/images",

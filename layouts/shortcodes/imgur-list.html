@@ -1,6 +1,7 @@
 {{ range $groupIndex, $datum := $.Site.Data.imgur }}
 {{ $isFirst := cond (eq ($groupIndex) 0) "" " mt-4" }}
-<h4 class="{{ $isFirst }}">
+<h4 class="{{ $isFirst }}" id="{{ $datum.name | urlize }}">
+    <a class="text-decoration-none" href="#{{ $datum.name | urlize }}">📎</a>
     {{ $datum.name }}
     <span class="badge badge-info">{{ len $datum.items }}</span>
 </h4>
@@ -37,8 +38,18 @@
                             href="{{ .link }}"
                             rel="noopener noreferrer"
                             target="_blank"
+                            class="btn btn-sm btn-outline-info"
+                            title="Open image in new tab"
                         >
-                            Open image in new tab
+                            <i class="fa fa-share-square-o"></i>
+                        </a>
+
+                        <a
+                            href="{{ .link }}"
+                            class="btn btn-sm btn-outline-info imgur-copy-link"
+                            title="Copy image URL"
+                        >
+                            <i class="fa fa-clipboard"></i>
                         </a>
                     </p>
                 </div>
@@ -60,7 +71,6 @@
 <script src="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/js/blueimp-gallery.min.js"></script>
 <script>
     const allLinks = [...document.querySelectorAll(".card-body > div > a")];
-
     allLinks.forEach((elem) => {
         elem.addEventListener(
             "click",
@@ -78,5 +88,13 @@
             },
             false
         );
+    });
+
+    const copyLinks = [...document.querySelectorAll('.imgur-copy-link')];
+    copyLinks.forEach((link) => {
+        link.addEventListener('click', (evt) => {
+            evt.preventDefault();
+            navigator.clipboard.writeText(link.getAttribute('href'));
+        });
     });
 </script>
