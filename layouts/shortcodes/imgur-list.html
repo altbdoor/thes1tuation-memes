@@ -1,7 +1,10 @@
 {{ range $groupIndex, $datum := $.Site.Data.imgur }}
 {{ $isFirst := cond (eq ($groupIndex) 0) "" " mt-4" }}
 <h4 class="{{ $isFirst }}" id="{{ $datum.name | urlize }}">
-    <a class="text-decoration-none" href="#{{ $datum.name | urlize }}">📎</a>
+    <a class="text-decoration-none" href="#{{ $datum.name | urlize }}">
+        <i class="fa fa-paperclip"></i>
+    </a>
+
     {{ $datum.name }}
     <span class="badge badge-info">{{ len $datum.items }}</span>
 </h4>
