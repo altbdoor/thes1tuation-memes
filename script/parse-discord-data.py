@@ -16,12 +16,12 @@ Post = TypedDict(
         "filename": str,
         "timestamp": str,
         "tags": list[str],
-    }
+    },
 )
 
 post_list: list[Post] = []
 
-with open(raw_data, 'r') as fp:
+with open(raw_data, "r") as fp:
     post_list = json.load(fp)
 
 for datum in post_list:
@@ -36,3 +36,4 @@ with open(parsed_data, "w") as fp:
 
     group_data = [{"name": key, "items": list(items)} for key, items in groups]
     json.dump(group_data, fp, indent=4)
+    print(f"grouped {len(post_list)} media into {len(group_data)} months")
