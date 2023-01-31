@@ -16,9 +16,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: zcong1993/setup-timezone@v2.0.0
-        with:
-          timezone: Asia/Kuala_Lumpur
+      - run: sudo timedatectl set-timezone Asia/Kuala_Lumpur
 
       - uses: actions/checkout@v3
 
@@ -27,6 +25,7 @@ jobs:
           python-version: '3.11'
 
       - run: |
+          python --version
           python script/fetch-imgur-data.py
           python script/parse-discord-data.py
         env:
@@ -34,10 +33,9 @@ jobs:
 
       - uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.108.0'
+          hugo-version: '0.110.0'
 
-      - run: |
-          hugo -v
+      - run: hugo -v
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
