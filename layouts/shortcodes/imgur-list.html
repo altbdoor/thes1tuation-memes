@@ -1,4 +1,4 @@
-{{ range $groupIndex, $datum := $.Site.Data.imgur }}
+{{ range $groupIndex, $datum := index $.Site.Data "imgur-parsed" }}
 {{ $isFirst := cond (eq ($groupIndex) 0) "" " mt-4" }}
 <h4 class="{{ $isFirst }}" id="{{ $datum.name | urlize }}">
     <a class="text-decoration-none" href="#{{ $datum.name | urlize }}">
