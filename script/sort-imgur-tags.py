@@ -30,5 +30,5 @@ for image_id in sorted_ids:
 
     sorted_tags.append(matched_raw_tag_line[0])
 
-with open(imgur_tags, "w") as fp:
+with open(imgur_tags, "w", newline="\n") as fp:
     fp.writelines(sorted_tags)
