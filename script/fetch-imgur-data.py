@@ -3,6 +3,7 @@
 from urllib.request import Request, urlopen
 import os
 import json
+import random
 from typing import TypedDict
 from itertools import groupby
 from datetime import datetime
@@ -18,7 +19,13 @@ if client_id is not None:
     req = Request(
         f"https://api.imgur.com/3/album/{album_hash}/images",
         None,
-        {"Authorization": f"Client-ID {client_id}"},
+        {
+            "Authorization": f"Client-ID {client_id}",
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                f"Chrome/79.0.3945.{random.randint(0, 9999)} Safari/537.{random.randint(0, 99)}"
+            )
+        },
     )
     with urlopen(req) as res, open(cache_json, "w") as fp:
         data = json.loads(res.read())
