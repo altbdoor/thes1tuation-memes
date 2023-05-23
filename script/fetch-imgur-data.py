@@ -15,16 +15,32 @@ current_dir = os.path.dirname(__file__)
 cache_json = os.path.join(current_dir, "imgur-cache.json")
 imgur_json = os.path.join(current_dir, "../data/imgur-parsed.json")
 
-if client_id is not None:
+# bypass imgur rate limit by hosting the json elsewhere
+bypass_ratelimit_url = os.getenv("IMGUR_BYPASS_RATELIMIT_URL")
+
+user_agent = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+    f"Chrome/79.0.3945.{random.randint(0, 9999)} Safari/537.{random.randint(0, 99)}"
+)
+
+if bypass_ratelimit_url is not None:
+    print("(i) bypassing rate limits on imgur with a third party URL")
+
+    req = Request(
+        bypass_ratelimit_url,
+        None,
+        {"User-Agent": user_agent}
+    )
+    with urlopen(req) as res, open(cache_json, "w") as fp:
+        data = json.loads(res.read())
+        json.dump(data, fp, indent=4)
+elif client_id is not None:
     req = Request(
         f"https://api.imgur.com/3/album/{album_hash}/images",
         None,
         {
             "Authorization": f"Client-ID {client_id}",
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                f"Chrome/79.0.3945.{random.randint(0, 9999)} Safari/537.{random.randint(0, 99)}"
-            )
+            "User-Agent": user_agent
         },
     )
     with urlopen(req) as res, open(cache_json, "w") as fp:

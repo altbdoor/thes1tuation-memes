@@ -30,10 +30,11 @@ jobs:
           python script/parse-discord-data.py
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
+          IMGUR_BYPASS_RATELIMIT_URL: ${{ vars.IMGUR_BYPASS_RATELIMIT_URL }}
 
       - uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.110.0'
+          hugo-version: '0.111.3'
 
       - run: hugo -v
 
