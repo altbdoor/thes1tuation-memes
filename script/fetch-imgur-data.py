@@ -16,14 +16,14 @@ cache_json = os.path.join(current_dir, "imgur-cache.json")
 imgur_json = os.path.join(current_dir, "../data/imgur-parsed.json")
 
 # bypass imgur rate limit by hosting the json elsewhere
-bypass_ratelimit_url = os.getenv("IMGUR_BYPASS_RATELIMIT_URL")
+bypass_ratelimit_url = os.getenv("IMGUR_BYPASS_RATELIMIT_URL", "")
 
 user_agent = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
     f"Chrome/79.0.3945.{random.randint(0, 9999)} Safari/537.{random.randint(0, 99)}"
 )
 
-if bypass_ratelimit_url is not None:
+if bypass_ratelimit_url is not "":
     print("(i) bypassing rate limits on imgur with a third party URL")
 
     req = Request(
