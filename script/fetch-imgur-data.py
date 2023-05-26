@@ -23,7 +23,7 @@ user_agent = (
     f"Chrome/79.0.3945.{random.randint(0, 9999)} Safari/537.{random.randint(0, 99)}"
 )
 
-if bypass_ratelimit_url is not "":
+if bypass_ratelimit_url != "":
     print("(i) bypassing rate limits on imgur with a third party URL")
 
     req = Request(
@@ -35,6 +35,7 @@ if bypass_ratelimit_url is not "":
         data = json.loads(res.read())
         json.dump(data, fp, indent=4)
 elif client_id is not None:
+    print("(i) calling official imgur API")
     req = Request(
         f"https://api.imgur.com/3/album/{album_hash}/images",
         None,
