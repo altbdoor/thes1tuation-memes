@@ -25,25 +25,20 @@ user_agent = (
 
 if bypass_ratelimit_url != "":
     print("(i) bypassing rate limits on imgur with a third party URL")
+    req = Request(bypass_ratelimit_url, None, {"User-Agent": user_agent})
 
-    req = Request(
-        bypass_ratelimit_url,
-        None,
-        {"User-Agent": user_agent}
-    )
     with urlopen(req) as res, open(cache_json, "w") as fp:
         data = json.loads(res.read())
         json.dump(data, fp, indent=4)
 elif client_id is not None:
     print("(i) calling official imgur API")
     req = Request(
-        f"https://api.imgur.com/3/album/{album_hash}/images",
+        f"https://api.imgur.com/post/v1/albums/{album_hash}?include=media,tags,account",
+        # f"https://api.imgur.com/3/album/{album_hash}/images",
         None,
-        {
-            "Authorization": f"Client-ID {client_id}",
-            "User-Agent": user_agent
-        },
+        {"Authorization": f"Client-ID {client_id}", "User-Agent": user_agent},
     )
+
     with urlopen(req) as res, open(cache_json, "w") as fp:
         data = json.loads(res.read())
         json.dump(data, fp, indent=4)
@@ -70,30 +65,47 @@ Image = TypedDict(
         "groupBy": str,
     },
 )
+RawImage = TypedDict(
+    "RawImage",
+    {
+        "id": str,
+        "created_at": str,
+        "mime_type": str,
+        "width": int,
+        "height": int,
+        "size": int,
+        "url": str,
+    },
+)
 
 remapped_data: list[Image] = []
-valid_keys = (
-    "id",
-    "datetime",
-    "type",
-    "width",
-    "height",
-    "size",
-    "link",
-)
-for img in data.get("data", []):
-    remapped_img: Image = {key: img.get(key) for key in valid_keys}
-    remapped_img["thumbnail"] = (
-        remapped_img["link"]
-        .replace(remapped_img["id"], remapped_img["id"] + "b")
+
+for img in data.get("media", []):
+    raw_image: RawImage = {key: img.get(key) for key in RawImage.__annotations__.keys()}
+
+    img_datetime = datetime.fromisoformat(raw_image["created_at"])
+    img_datetime = img_datetime.replace(tzinfo=ZoneInfo("UTC")).astimezone(
+        tz=ZoneInfo("Asia/Kuala_Lumpur")
+    )
+
+    thumbnail = (
+        raw_image["url"]
+        .replace(raw_image["id"], raw_image["id"] + "b")
         .replace(".gif", ".jpg")
     )
 
-    img_datetime = datetime.fromtimestamp(
-        remapped_img["datetime"], ZoneInfo("Asia/Kuala_Lumpur")
-    )
-    remapped_img["timeDisplay"] = img_datetime.strftime("%d %b, %I:%M %p")
-    remapped_img["groupBy"] = img_datetime.strftime("%B %Y")
+    remapped_img: Image = {
+        "id": raw_image["id"],
+        "datetime": int(img_datetime.timestamp()),
+        "type": raw_image["mime_type"],
+        "width": raw_image["width"],
+        "height": raw_image["height"],
+        "size": raw_image["size"],
+        "link": raw_image["url"],
+        "thumbnail": thumbnail,
+        "timeDisplay": img_datetime.strftime("%d %b, %I:%M %p"),
+        "groupBy": img_datetime.strftime("%B %Y"),
+    }
 
     remapped_data.append(remapped_img)
 
