@@ -24,11 +24,6 @@
         {{ partial "footer.html" . }}
     </div>
 
-    <div hidden>
-        {{ $imgur_json := resources.Get "imgur.json" }}
-        {{ $imgur_json.RelPermalink }}
-    </div>
-
     {{/*
     {{ $js := resources.Get "main.js" | resources.Minify | resources.Fingerprint }}
     <script src="{{ $js.RelPermalink }}"></script>
