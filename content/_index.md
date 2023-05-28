@@ -10,6 +10,6 @@ Small archive of the memes I made for the very cool dude, [TheS1tuation](https:/
     Please proceed at your own risk.
 </div>
 
-- [imgur](./imgur/)
+- [imgur](./imgur/) (Possible shadowban! [Read more](./imgur-shadowban/))
 - [Discord](./discord/)
 - [About](./about/)

@@ -4,6 +4,7 @@ from urllib.request import Request, urlopen
 import os
 import json
 import random
+import shutil
 from typing import TypedDict
 from itertools import groupby
 from datetime import datetime
@@ -116,3 +117,6 @@ with open(imgur_json, "w") as fp:
     group_data = [{"name": key, "items": list(items)} for key, items in groups]
     json.dump(group_data, fp, indent=4)
     print(f"grouped {len(remapped_data)} images into {len(group_data)} months")
+
+# give a static copy to web
+shutil.copy(imgur_json, os.path.join(current_dir, "../assets/imgur.json"))
