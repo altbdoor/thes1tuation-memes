@@ -5,7 +5,7 @@ layout: plain
 
 <div class="alert alert-primary">
     <p>tldr; you can find the backups here:</p>
-    <ol style="margin-bottom: 0;">
+    <ol class="mb-0">
         <li>
             <a href="https://f000.backblazeb2.com/file/thes1tuation-memes/magomet.zip">Images (48.7 MB)</a>
         </li>
@@ -13,7 +13,7 @@ layout: plain
             <a href="https://github.com/altbdoor/thes1tuation-memes/blob/master/data/imgur-tags.yml">Tags in YAML</a>
         </li>
         <li>
-            <a href="https://github.com/altbdoor/thes1tuation-memes/tree/gh-pages/imgur.json">Raw JSON data</a>
+            <a href="{{< rel-assets path="imgur.json" >}}">Raw JSON data</a>
         </li>
     </ol>
 </div>
@@ -61,15 +61,11 @@ for a week or so.
 For what its worth, the [imgur status page](https://status.imgur.com/) has been
 "fixing" an issue since May 12.
 
-<blockquote class="blockquote pl-3">
-
+{{< blockquote author="<https://status.imgur.com/incidents/0g0nq22f38yh>" >}}
 **Ongoing intermittent issues loading content**
 
 We are working to address ongoing issues causing degraded performance across all platforms causing errors on apps, blank screens to appear, and generally wonky behavior.
-
-\- <https://status.imgur.com/incidents/0g0nq22f38yh>
-
-</blockquote>
+{{< /blockquote >}}
 
 #### Third failure, album is 404 for friends
 
