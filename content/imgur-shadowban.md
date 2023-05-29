@@ -4,7 +4,7 @@ layout: plain
 ---
 
 <div class="alert alert-primary">
-    <p>tldr; you can find the backups here:</p>
+    <p>tldr; memes are safe in <a class="alert-link" href="../imgur/">here</a>, you can find the backups here:</p>
     <ol class="mb-0">
         <li>
             <a href="https://f000.backblazeb2.com/file/thes1tuation-memes/magomet.zip">Images (48.7 MB)</a>
