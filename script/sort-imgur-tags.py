@@ -2,6 +2,7 @@
 
 import os
 import json
+from datetime import datetime
 
 current_dir = os.path.dirname(__file__)
 cache_json = os.path.join(current_dir, "imgur-cache.json")
@@ -10,9 +11,20 @@ imgur_tags = os.path.join(current_dir, "../data/imgur-tags.yml")
 with open(cache_json, "r") as fp:
     data = json.load(fp)
 
-minimal_data: list[dict[str, str]] = [
-    {"id": datum.get("id"), "datetime": datum.get("datetime")} for datum in data["data"]
-]
+minimal_data = []
+
+for datum in data.get("media", []):
+    created_at = datum.get("created_at")
+    created_at = datetime.fromisoformat(created_at)
+    created_at = created_at.timestamp()
+
+    minimal_data.append(
+        {
+            "id": datum.get("id", ""),
+            "datetime": created_at,
+        }
+    )
+
 minimal_data = sorted(minimal_data, key=lambda x: x["datetime"], reverse=False)
 sorted_ids = [datum.get("id", "") for datum in minimal_data]
 
