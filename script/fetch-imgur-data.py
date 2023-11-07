@@ -28,7 +28,7 @@ if bypass_ratelimit_url != "":
     print("(i) bypassing rate limits on imgur with a third party URL")
     req = Request(bypass_ratelimit_url, None, {"User-Agent": user_agent})
 
-    with urlopen(req) as res, open(cache_json, "w") as fp:
+    with urlopen(req) as res, open(cache_json, "w", newline="") as fp:
         data = json.loads(res.read())
         json.dump(data, fp, indent=4)
 elif client_id is not None:
@@ -40,7 +40,7 @@ elif client_id is not None:
         {"Authorization": f"Client-ID {client_id}", "User-Agent": user_agent},
     )
 
-    with urlopen(req) as res, open(cache_json, "w") as fp:
+    with urlopen(req) as res, open(cache_json, "w", newline="") as fp:
         data = json.loads(res.read())
         json.dump(data, fp, indent=4)
 else:
@@ -110,7 +110,7 @@ for img in data.get("media", []):
 
     remapped_data.append(remapped_img)
 
-with open(imgur_json, "w") as fp:
+with open(imgur_json, "w", newline="") as fp:
     remapped_data = sorted(remapped_data, key=lambda x: x["datetime"], reverse=True)
     groups = groupby(remapped_data, key=lambda x: x["groupBy"])
 
