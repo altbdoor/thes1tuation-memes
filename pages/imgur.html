@@ -1,0 +1,127 @@
+---
+layout: base
+title: imgur
+description: |
+  All times are recorded in GMT+8.
+  The original album in imgur is [shadowbanned](/imgur-shadowban/).
+  Click on the image to open the gallery view.
+---
+
+{% assign all_tags = site.data.imgur-tags %}
+
+{% for group in site.data.imgur-parsed %}
+<h4 class="{% if forloop.index0 != 0 %}mt-4{% endif %}" id="{{ group.name | slugify }}">
+  <a class="text-decoration-none" href="#{{ group.name | slugify }}">
+    <i class="fa fa-paperclip"></i>
+  </a>
+
+  {{ group.name }}
+  <span class="badge text-bg-info">{{ group.items | size }}</span>
+</h4>
+
+<div class="row">
+  {% for item in group.items %}
+    {% assign current_tags = all_tags[item.id] %}
+    {% if current_tags == nil %}
+      {% assign current_tags = '' | split: ',' %}
+    {% endif %}
+
+    {% if item.link contains '.gif' %}
+      {% assign current_tags = current_tags | push: 'gif' %}
+    {% endif %}
+
+    {% assign current_tags = current_tags | sort %}
+
+    <div class="col-md-6 col-lg-4 mt-2">
+      <div class="card card-body p-2">
+        <div class="d-flex">
+          <a
+            href="{{ item.link }}"
+            rel="noopener noreferrer"
+            data-title="{{ item.timeDisplay }} - {{ current_tags | join: ', ' }}"
+            data-image-id="{{ item.id }}"
+          >
+            <img
+              class="me-2"
+              src="{{ item.thumbnail }}"
+              width="120"
+              height="120"
+              loading="lazy"
+              alt="{{ item.id }}"
+            />
+          </a>
+          <div>
+            <div class="mb-1">
+              <strong>{{ item.timeDisplay }}</strong>
+            </div>
+            <div class="mb-1">
+              {% for tag in current_tags %}
+              <span class="badge text-bg-secondary">{{ tag }}</span>
+              {% endfor %}
+            </div>
+            <div>
+              <a
+                href="{{ item.link }}"
+                rel="noopener noreferrer"
+                target="_blank"
+                class="btn btn-sm btn-outline-info"
+                title="Open image in new tab"
+              >
+                <i class="fa fa-share-square-o"></i>
+              </a>
+
+              <a
+                href="{{ item.link }}"
+                class="btn btn-sm btn-outline-info imgur-copy-link"
+                title="Copy image URL"
+              >
+                <i class="fa fa-clipboard"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div class="blueimp-gallery blueimp-gallery-controls" aria-label="image gallery" aria-modal="true" role="dialog">
+  <div class="slides" aria-live="polite"></div>
+  <h3 class="title"></h3>
+  <a class="prev" aria-controls="blueimp-gallery" aria-label="previous slide" aria-keyshortcuts="ArrowLeft"></a>
+  <a class="next" aria-controls="blueimp-gallery" aria-label="next slide" aria-keyshortcuts="ArrowRight"></a>
+  <a class="close" aria-controls="blueimp-gallery" aria-label="close" aria-keyshortcuts="Escape"></a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/js/blueimp-gallery.min.js"></script>
+<script>
+  const allLinks = [...document.querySelectorAll(".card-body > div > a")];
+  allLinks.forEach((elem) => {
+    elem.addEventListener(
+      "click",
+      (evt) => {
+        const id = evt.target.closest("a").getAttribute('data-image-id');
+        const index = allLinks.findIndex((elem) => elem.getAttribute('data-image-id') === id);
+
+        blueimp.Gallery(allLinks, {
+          event: evt,
+          index,
+          container: ".blueimp-gallery",
+          toggleControlsOnEnter: false,
+          toggleControlsOnSlideClick: false,
+        });
+      },
+      false
+    );
+  });
+
+  const copyLinks = [...document.querySelectorAll('.imgur-copy-link')];
+  copyLinks.forEach((link) => {
+    link.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      navigator.clipboard.writeText(link.getAttribute('href'));
+    });
+  });
+</script>

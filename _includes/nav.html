@@ -1,0 +1,16 @@
+<div class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      {% for item in site.data.nav %}
+      <li class="nav-item">
+        <a
+          href="{{ site.baseurl }}{{ item.href }}"
+          class="nav-link {% if page.url == item.href %}active{% endif %}"
+        >
+          {{ item.name }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+---
+layout: base
+title: Discord
+description: |
+  All times are recorded in GMT+8.
+  All audio is set to 20% to prevent ear damage.
+  More clips are available in [Twitch clips](https://www.twitch.tv/thes1tuation/videos?featured=false&filter=clips&range=all).
+---
+
+{% for group in site.data.discord-parsed %}
+<h4 class="{% if forloop.index0 != 0 %}mt-4{% endif %}">
+  {{ group.name }}
+  <span class="badge text-bg-info">{{ group.items | size }}</span>
+</h4>
+
+{% for item in group.items %}
+<div class="card card-body p-2 mt-2">
+  <strong>{{ item.filename }}</strong>
+  {% assign file_ext = item.filename | split: '.' | last %}
+
+  <div class="mt-1">
+    {% if file_ext == 'mp3' %}
+    <audio
+      src="{{ site.baseurl }}/assets/audio/{{ item.filename }}"
+      preload="metadata"
+      controls
+      loop
+    ></audio>
+    {% elsif file_ext == 'mp4' %}
+    <video
+      src="{{ site.baseurl }}/assets/video/{{ item.filename }}#t=0.1"
+      preload="metadata"
+      controls
+      playsinline
+      loop
+    ></video>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+<!-- loop -->
+{% endfor %}
+
+<script>
+  [...document.querySelectorAll("audio, video")].forEach((elem) => {
+    elem.volume = 0.2;
+  });
+</script>
