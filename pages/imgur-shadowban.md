@@ -7,7 +7,7 @@ description: |
 
 <div class="alert alert-primary">
 
-tldr; memes are safe in [here](/imgur/){: .alert-link}, you can find the backups here:
+tldr; memes are safe in [here](../imgur/){: .alert-link}, you can find the backups here:
 
 1. [Images (51.6 MB)](https://f000.backblazeb2.com/file/thes1tuation-memes/magomet.zip)
 1. [Tags in YAML](https://github.com/altbdoor/thes1tuation-memes/blob/master/_data/imgur-tags.yml)

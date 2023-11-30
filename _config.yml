@@ -21,6 +21,7 @@ exclude:
   - Dockerfile
   - "*.sh"
   - scripts/
+  - LICENSE
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/
