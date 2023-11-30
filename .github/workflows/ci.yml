@@ -1,0 +1,40 @@
+name: Build the site
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo timedatectl set-timezone Asia/Kuala_Lumpur
+
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - run: |
+          python --version
+          python scripts/fetch-imgur-data.py
+          python scripts/parse-discord-data.py
+        env:
+          IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
+
+      - name: Build the Docker image
+        run: |
+          REPO_NAME=${GITHUB_REPOSITORY#*/}
+          docker build . --file Dockerfile --tag $IMAGE_NAME
+          docker run --rm -v "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "/${REPO_NAME}"
+          docker system prune -af
+        env:
+          IMAGE_NAME: jekyll-dev:latest
+
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _site
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
