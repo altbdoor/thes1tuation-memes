@@ -22,6 +22,10 @@ jobs:
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 
+      - uses: ScribeMD/docker-cache@0.3.6
+        with:
+          key: docker-${{ hashFiles('**/Dockerfile') }}
+
       - name: Build the Docker image
         run: |
           REPO_NAME=${GITHUB_REPOSITORY#*/}
