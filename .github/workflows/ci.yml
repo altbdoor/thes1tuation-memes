@@ -9,7 +9,7 @@ jobs:
     steps:
       - run: sudo timedatectl set-timezone Asia/Kuala_Lumpur
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v4
         with:
@@ -27,7 +27,6 @@ jobs:
           REPO_NAME=${GITHUB_REPOSITORY#*/}
           docker build . --file Dockerfile --tag $IMAGE_NAME
           docker run --rm -v "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "/${REPO_NAME}"
-          docker system prune -af
         env:
           IMAGE_NAME: jekyll-dev:latest
 
