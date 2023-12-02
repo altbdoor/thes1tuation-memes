@@ -34,6 +34,7 @@ jobs:
 
           REPO_NAME=${GITHUB_REPOSITORY#*/}
           docker run --rm --volume "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "/${REPO_NAME}"
+          sudo chown -R $(id -u):$(id -g) ./_site/
           bash scripts/clean-links.sh
         env:
           IMAGE_NAME: jekyll-dev:latest
