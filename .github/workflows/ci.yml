@@ -28,12 +28,13 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          if [[ "$(docker images -q $IMAGE_NAME 2> /dev/null)" == "" ]]; then
+          if [[ "$(docker images --quiet $IMAGE_NAME 2> /dev/null)" == "" ]]; then
               docker build . --file Dockerfile --tag $IMAGE_NAME
           fi
 
           REPO_NAME=${GITHUB_REPOSITORY#*/}
-          docker run --rm -v "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "/${REPO_NAME}"
+          docker run --rm --volume "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "/${REPO_NAME}"
+          bash scripts/clean-links.sh
         env:
           IMAGE_NAME: jekyll-dev:latest
 

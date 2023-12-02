@@ -22,6 +22,7 @@ exclude:
   - "*.sh"
   - scripts/
   - LICENSE
+  - README.md
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/

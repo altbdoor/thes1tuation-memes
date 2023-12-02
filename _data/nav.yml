@@ -1,8 +1,13 @@
 - name: Home
   href: /
+
 - name: imgur
   href: /imgur/
+  count_from: imgur-parsed
+
 - name: Discord
   href: /discord/
+  count_from: discord-parsed
+
 - name: About
   href: /about/

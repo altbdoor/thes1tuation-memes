@@ -37,6 +37,7 @@ else:
 Image = TypedDict(
     "Image",
     {
+        "index": int,
         "id": str,
         "datetime": int,
         "type": str,
@@ -80,6 +81,7 @@ for img in data.get("media", []):
     )
 
     remapped_img: Image = {
+        "index": -1,
         "id": raw_image["id"],
         "datetime": int(img_datetime.timestamp()),
         "type": raw_image["mime_type"],
@@ -96,6 +98,8 @@ for img in data.get("media", []):
 
 with open(imgur_json, "w", newline="") as fp:
     remapped_data = sorted(remapped_data, key=lambda x: x["datetime"], reverse=True)
+    remapped_data = [{**item, "index": index} for index, item in enumerate(remapped_data)]
+
     groups = groupby(remapped_data, key=lambda x: x["groupBy"])
 
     group_data = [{"name": key, "items": list(items)} for key, items in groups]

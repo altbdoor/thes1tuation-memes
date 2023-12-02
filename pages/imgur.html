@@ -37,9 +37,9 @@ description: |
         <div class="d-flex">
           <a
             href="{{ item.link }}"
-            rel="noopener noreferrer"
             data-title="{{ item.timeDisplay }} - {{ current_tags | join: ', ' }}"
             data-image-id="{{ item.id }}"
+            data-image-index="{{ item.index }}"
           >
             <img
               class="me-2"
@@ -62,7 +62,6 @@ description: |
             <div>
               <a
                 href="{{ item.link }}"
-                rel="noopener noreferrer"
                 target="_blank"
                 class="btn btn-sm btn-outline-info"
                 title="Open image in new tab"
@@ -82,7 +81,6 @@ description: |
         </div>
       </div>
     </div>
-
   {% endfor %}
 </div>
 {% endfor %}
@@ -97,31 +95,30 @@ description: |
 
 <script src="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/js/blueimp-gallery.min.js"></script>
 <script>
-  const allLinks = [...document.querySelectorAll(".card-body > div > a")];
-  allLinks.forEach((elem) => {
-    elem.addEventListener(
-      "click",
-      (evt) => {
-        const id = evt.target.closest("a").getAttribute('data-image-id');
-        const index = allLinks.findIndex((elem) => elem.getAttribute('data-image-id') === id);
+  const allLinks = [...document.querySelectorAll("[data-image-id]")];
 
-        blueimp.Gallery(allLinks, {
-          event: evt,
-          index,
-          container: ".blueimp-gallery",
-          toggleControlsOnEnter: false,
-          toggleControlsOnSlideClick: false,
-        });
-      },
-      false
-    );
-  });
-
-  const copyLinks = [...document.querySelectorAll('.imgur-copy-link')];
-  copyLinks.forEach((link) => {
-    link.addEventListener('click', (evt) => {
+  document.querySelector(".container").addEventListener("click", (evt) => {
+    const copyLink = evt.target.closest(".imgur-copy-link");
+    if (copyLink) {
       evt.preventDefault();
-      navigator.clipboard.writeText(link.getAttribute('href'));
-    });
+      navigator.clipboard.writeText(copyLink.getAttribute("href"));
+      return;
+    }
+
+    const imageLink = evt.target.closest("[data-image-id]");
+    if (imageLink) {
+      evt.preventDefault();
+      const id = imageLink.getAttribute("data-image-id");
+      const index = parseInt(imageLink.getAttribute("data-image-index"), 10);
+
+      blueimp.Gallery(allLinks, {
+        event: evt,
+        index,
+        container: ".blueimp-gallery",
+        toggleControlsOnEnter: false,
+        toggleControlsOnSlideClick: false,
+      });
+      return;
+    }
   });
 </script>
