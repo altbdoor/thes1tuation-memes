@@ -1,6 +1,6 @@
-FROM ruby:3.2-alpine as builder
+FROM ruby:3.3-alpine as builder
 
-ENV JEKYLL_VERSION='4.3.2'
+ENV JEKYLL_VERSION='4.3.3'
 
 RUN apk add build-base
 
@@ -13,7 +13,7 @@ RUN bundle init \
 
 # ==========
 
-FROM ruby:3.2-alpine as app
+FROM ruby:3.3-alpine as app
 
 COPY --from=builder /app /app
 COPY --from=builder /usr/local/bundle /usr/local/bundle
