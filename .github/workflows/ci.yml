@@ -22,7 +22,7 @@ jobs:
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 
-      - uses: ScribeMD/docker-cache@0.3.6
+      - uses: ScribeMD/docker-cache@0.3.7
         with:
           key: docker-${{ hashFiles('**/Dockerfile') }}
 
