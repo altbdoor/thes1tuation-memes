@@ -1,19 +1,21 @@
-FROM ruby:3.3-alpine as builder
+FROM ruby:3.3-alpine as base
 
-ENV JEKYLL_VERSION='4.3.3'
-
-RUN apk add build-base
-
-WORKDIR /app/
-
-RUN bundle init \
-    && bundle add jekyll -v "$JEKYLL_VERSION" \
-    && bundle add minima \
-    && bundle add jekyll-paginate-v2
+ENV JEKYLL_VERSION="4.3.3"
 
 # ==========
 
-FROM ruby:3.3-alpine as app
+FROM base as builder
+
+WORKDIR /app/
+
+RUN apk add build-base
+RUN bundle init \
+    && bundle add jekyll -v "$JEKYLL_VERSION" \
+    && bundle add minima jekyll-paginate-v2
+
+# ==========
+
+FROM base as app
 
 COPY --from=builder /app /app
 COPY --from=builder /usr/local/bundle /usr/local/bundle
