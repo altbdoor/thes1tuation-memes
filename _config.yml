@@ -1,6 +1,11 @@
 # Site settings
 title: TheS1tuation memes
 
+collections:
+  imgur:
+    output: true
+    sort_by: year
+
 # Build settings
 plugins:
   - jekyll-paginate-v2

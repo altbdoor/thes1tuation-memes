@@ -6,3 +6,4 @@ vendor
 
 _data/*-parsed.json
 assets/imgur.json
+_imgur/*.md

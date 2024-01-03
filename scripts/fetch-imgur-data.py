@@ -108,3 +108,28 @@ with open(imgur_json, "w", newline="") as fp:
 
 # give a static copy to web
 shutil.copy(imgur_json, static_copy_json)
+
+# populate the collections folder
+collections_dir = os.path.join(current_dir, "../_imgur/")
+for filename in os.listdir(collections_dir):
+    if filename.endswith(".md"):
+        filepath = os.path.join(collections_dir, filename)
+        os.remove(filepath)
+
+unique_years: list[str] = []
+
+for datum in remapped_data:
+    year_str = datum["groupBy"].split(" ")[1]
+    if year_str not in unique_years:
+        unique_years.append(year_str)
+
+for year in unique_years:
+    year_filepath = os.path.join(collections_dir, f"{year}.md")
+    with open(year_filepath, "w", newline="") as fp:
+        fp.write("\n".join([
+            "---",
+            "layout: imgur",
+            f"title: imgur {year}",
+            f"year: {year}",
+            "---",
+        ]))

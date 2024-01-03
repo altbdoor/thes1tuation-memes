@@ -40,6 +40,7 @@
       <h2>{{ site.title }}</h2>
 
       {% if page.description %} {{ page.description | markdownify }} {% endif %}
+      {% if layout.description %} {{ layout.description | markdownify }} {% endif %}
 
       <div class="mb-3">{% include nav.html %}</div>
 

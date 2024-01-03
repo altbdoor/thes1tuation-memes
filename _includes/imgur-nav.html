@@ -1,0 +1,20 @@
+{% assign reversed_imgur = site.imgur | reverse %}
+
+{% for col in reversed_imgur %}
+  <a href="{{ col.url }}" class="btn {% if page.url == col.url %}btn-primary{% else %}btn-secondary{% endif %}">
+    Year {{ col.year }}
+
+    {% assign count = 0 %}
+
+    {% for group in site.data.imgur-parsed %}
+      {% if group.name contains col.year %}
+        {% assign group_size = group.items | size %}
+        {% assign count = count | plus: group_size %}
+      {% endif %}
+    {% endfor %}
+
+    <span class="badge rounded-pill text-bg-info">
+      {{ count }}
+    </span>
+  </a>
+{% endfor %}
