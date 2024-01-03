@@ -1,7 +1,10 @@
 {% assign reversed_imgur = site.imgur | reverse %}
 
 {% for col in reversed_imgur %}
-  <a href="{{ col.url }}" class="btn {% if page.url == col.url %}btn-primary{% else %}btn-secondary{% endif %}">
+  <a
+    href="{{ site.baseurl }}{{ col.url }}"
+    class="btn {% if page.url == col.url %}btn-primary{% else %}btn-secondary{% endif %}"
+  >
     Year {{ col.year }}
 
     {% assign count = 0 %}
