@@ -35,9 +35,14 @@ jobs:
           REPO_NAME=${GITHUB_REPOSITORY#*/}
           docker run --rm --volume "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "/${REPO_NAME}"
           sudo chown -R $(id -u):$(id -g) ./_site/
-          bash scripts/clean-links.sh
         env:
           IMAGE_NAME: jekyll-dev:latest
+
+      - name: Sanitize referrer policy
+        run: |
+          curl -OL https://github.com/altbdoor/clean-links/releases/latest/download/clean-links-linux.tgz
+          tar xzf clean-links-linux.tgz
+          ./clean-links --fix-all ./_site/
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
