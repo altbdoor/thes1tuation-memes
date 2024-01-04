@@ -42,7 +42,7 @@ jobs:
         run: |
           curl -OL https://github.com/altbdoor/clean-links/releases/latest/download/clean-links-linux.tgz
           tar xzf clean-links-linux.tgz
-          ./clean-links --fix-all ./_site/
+          ./clean-links run --fix-all ./_site/
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
