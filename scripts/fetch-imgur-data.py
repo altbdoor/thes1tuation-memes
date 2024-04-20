@@ -11,7 +11,10 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 client_id = os.getenv("IMGUR_CLIENT_ID")
-album_hash = "yzKq60n"
+album_hash_list = (
+    "yzKq60n",
+    "xUok0eh",
+)
 current_dir = os.path.dirname(__file__)
 imgur_json = os.path.join(current_dir, "../_data/imgur-parsed.json")
 static_copy_json = os.path.join(current_dir, "../assets/imgur.json")
@@ -21,18 +24,23 @@ user_agent = (
     f"Chrome/79.0.3945.{random.randint(0, 9999)} Safari/537.{random.randint(0, 99)}"
 )
 
+collected_media_list = []
+
 if client_id is None:
     raise Exception("please provide IMGUR_CLIENT_ID")
 else:
-    print("(i) calling somewhat official imgur API")
-    req = Request(
-        f"https://api.imgur.com/post/v1/albums/{album_hash}?include=media,tags,account",
-        None,
-        {"Authorization": f"Client-ID {client_id}", "User-Agent": user_agent},
-    )
+    for album_hash in album_hash_list:
+        print(f"(i) calling somewhat official imgur API for album ID {album_hash}")
+        req = Request(
+            f"https://api.imgur.com/post/v1/albums/{album_hash}?include=media,tags,account",
+            None,
+            {"Authorization": f"Client-ID {client_id}", "User-Agent": user_agent},
+        )
 
-    with urlopen(req) as res:
-        data = json.loads(res.read())
+        with urlopen(req) as res:
+            data = json.loads(res.read())
+            collected_media_list += data.get("media", [])
+            del data
 
 Image = TypedDict(
     "Image",
@@ -65,7 +73,7 @@ RawImage = TypedDict(
 
 remapped_data: list[Image] = []
 
-for img in data.get("media", []):
+for img in collected_media_list:
     raw_image: RawImage = {key: img.get(key) for key in RawImage.__annotations__.keys()}
 
     img_datetime = datetime.fromisoformat(raw_image["created_at"])
@@ -98,7 +106,9 @@ for img in data.get("media", []):
 
 with open(imgur_json, "w", newline="") as fp:
     remapped_data = sorted(remapped_data, key=lambda x: x["datetime"], reverse=True)
-    remapped_data = [{**item, "index": index} for index, item in enumerate(remapped_data)]
+    remapped_data = [
+        {**item, "index": index} for index, item in enumerate(remapped_data)
+    ]
 
     groups = groupby(remapped_data, key=lambda x: x["groupBy"])
 
@@ -126,10 +136,14 @@ for datum in remapped_data:
 for year in unique_years:
     year_filepath = os.path.join(collections_dir, f"{year}.md")
     with open(year_filepath, "w", newline="") as fp:
-        fp.write("\n".join([
-            "---",
-            "layout: imgur",
-            f"title: imgur {year}",
-            f"year: {year}",
-            "---",
-        ]))
+        fp.write(
+            "\n".join(
+                [
+                    "---",
+                    "layout: imgur",
+                    f"title: imgur {year}",
+                    f"year: {year}",
+                    "---",
+                ]
+            )
+        )
