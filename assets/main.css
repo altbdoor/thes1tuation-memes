@@ -1,0 +1,33 @@
+body {
+  overflow-y: scroll;
+}
+
+.blueimp-gallery {
+  background-color: rgba(17, 17, 17, 0.7);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 35px,
+    rgba(0, 0, 0, 0.7) 35px,
+    rgba(0, 0, 0, 0.7) 70px
+  );
+}
+
+video,
+audio {
+  max-width: 100%;
+  height: auto;
+}
+
+.alert > *:last-child {
+  margin-bottom: 0;
+}
+
+.highlighter-rouge .highlight {
+  margin-bottom: 0;
+}
+
+.highlighter-rouge > .highlight {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}

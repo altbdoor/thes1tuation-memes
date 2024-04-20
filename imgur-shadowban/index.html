@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>imgur shadowban - TheS1tuation memes</title>
+
+    <link rel="shortcut icon" href="/thes1tuation-memes/assets/ok.png?v=2" type="image/png" referrerpolicy="noreferrer"/>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css" referrerpolicy="noreferrer"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/css/blueimp-gallery.min.css" referrerpolicy="noreferrer"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" referrerpolicy="noreferrer"/>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/richleland/pygments-css@master/monokai.css" referrerpolicy="noreferrer"/>
+    
+
+    <link rel="stylesheet" href="/thes1tuation-memes/assets/main.css" referrerpolicy="noreferrer"/>
+  </head>
+  <body>
+    <div class="container pt-3 py-5">
+      <h2>TheS1tuation memes</h2>
+
+       <p>Some memes are haram.</p>
+ 
+      
+
+      <div class="mb-3"><div class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
+  <div class="container-fluid">
+    <ul class="navbar-nav">
+      
+      <li class="nav-item">
+        <a href="/thes1tuation-memes/" class="nav-link " referrerpolicy="noreferrer">
+          Home
+
+          
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a href="/thes1tuation-memes/imgur/" class="nav-link " referrerpolicy="noreferrer">
+          imgur
+
+          
+            
+
+            
+
+            <span class="badge rounded-pill text-bg-primary">
+              201
+            </span>
+          
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a href="/thes1tuation-memes/discord/" class="nav-link " referrerpolicy="noreferrer">
+          Discord
+
+          
+            
+
+            
+
+            <span class="badge rounded-pill text-bg-primary">
+              15
+            </span>
+          
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        <a href="/thes1tuation-memes/about/" class="nav-link " referrerpolicy="noreferrer">
+          About
+
+          
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+</div>
+
+      <div class="alert alert-primary">
+
+  <p>tldr; memes are safe in <a href="../imgur/" class="alert-link" referrerpolicy="noreferrer">here</a>, you can find the backups here:</p>
+
+  <ol>
+    <li><a href="https://f000.backblazeb2.com/file/thes1tuation-memes/magomet.zip" referrerpolicy="noreferrer">Images (61.0 MB)</a></li>
+    <li><a href="https://github.com/altbdoor/thes1tuation-memes/blob/master/_data/imgur-tags.yml" referrerpolicy="noreferrer">Tags in YAML</a></li>
+    <li><a href="/thes1tuation-memes/assets/imgur.json" referrerpolicy="noreferrer">Raw JSON data</a></li>
+  </ol>
+
+</div>
+
+<h3 id="first-failure-possible-flooding">First failure, possible flooding</h3>
+
+<p>At about <time datetime="2023-05-23T15:17:34+08:00">May 23, 2023, 3:17 PM</time>,
+I tried updating the website with some tags, but the build failed.
+The HTTP error was 429, which was commonly known as imgur&#39;s response
+to high traffic.</p>
+
+<p>I could not be spamming imgur servers, I rarely update the site even.
+But then again, I remember the <a href="https://old.reddit.com/r/DataHoarder/comments/12sbch3/imgur_is_updating_their_tos_on_may_15_2023_all/" referrerpolicy="noreferrer">imgur NSFW fiasco</a>,
+which <em>might</em> have triggered some people to start archiving from GitHub CI servers.</p>
+
+<p>I tried the usual bypassing by faking the <code class="language-plaintext highlighter-rouge">User-Agent</code>, but imgur servers
+replied with the same HTTP 429. That led me to believe that it is probably
+an IP range block, and GitHub CI servers are blocked.</p>
+
+<p>Defeated, I generated the <code class="language-plaintext highlighter-rouge">imgur.json</code> data file, hosted it on a third party
+website, and get the GitHub CI servers to fetch from there instead. This worked
+for once, and I thought things would improve after a week or so.</p>
+
+<h3 id="second-failure-album-is-404">Second failure, album is 404</h3>
+
+<p>At about <time datetime="2023-05-26T17:53:26+08:00">May 26, 2023, 5:53 PM</time>,
+I tried updating the site again. This time, the error was… odd. It is a HTTP 404.</p>
+
+<p>I tried opening the <a href="https://imgur.com/a/yzKq60n" referrerpolicy="noreferrer">album link</a>, and it works for me.
+I tried replaying the API call on my local machine, to get all the album images,
+and it is still HTTP 404.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>curl <span class="nt">-I</span> <span class="nt">-H</span> <span class="s1">&#39;Authorization: Client-ID xxx&#39;</span> <span class="s1">&#39;https://api.imgur.com/3/album/yzKq60n/images&#39;</span>
+<span class="go">HTTP/1.1 404 Not Found
+Connection: keep-alive
+Content-Length: 4323
+</span><span class="gp">content-type: text/html;</span><span class="w"> </span><span class="nv">charset</span><span class="o">=</span>utf-8
+</code></pre></div></div>
+
+<p>I was stumped. My album is there, but it is not there. I told myself,
+it is only one image that is going to be updated anyways. I will wait it out
+for a week or so.</p>
+
+<p>For what its worth, the <a href="https://status.imgur.com/" referrerpolicy="noreferrer">imgur status page</a> has been
+&#34;fixing&#34; an issue since May 12.</p>
+
+<blockquote class="blockquote ps-3 border-start border-4 border-success">
+  <p><strong>Ongoing intermittent issues loading content</strong></p>
+
+  <p>We are working to address ongoing issues causing degraded performance across all platforms causing errors on apps, blank screens to appear, and generally wonky behavior.</p>
+
+  <p>— <a href="https://status.imgur.com/incidents/0g0nq22f38yh" referrerpolicy="noreferrer">https://status.imgur.com/incidents/0g0nq22f38yh</a></p>
+</blockquote>
+
+<h3 id="third-failure-album-is-404-for-friends">Third failure, album is 404 for friends</h3>
+
+<p>After a couple of days, I hung out in Twitch chat with a couple of friends.
+I was informed that they could no longer access the album, and they see a 404 page.
+Once again, works on my local machine. Curious, I opened a private tab in Firefox,
+and voila, HTTP 404.</p>
+
+<p>I did not receive any notice about how or why the album is returning HTTP 404,
+from imgur. I think it <em>might</em> be that one NSFW meme, but I could not be sure.
+At <time datetime="2023-05-28T11:50:23+08:00">May 28, 2023, 11:50 AM</time>,
+I pushed some new Python code that fetches from a different API.</p>
+
+<div class="language-diff highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gi">+ f&#34;https://api.imgur.com/post/v1/albums/{album_hash}?include=media,tags,account&#34;
+</span><span class="gd">- f&#34;https://api.imgur.com/3/album/{album_hash}/images&#34;
+</span></code></pre></div></div>
+
+<p>This uses an officially undocumented API, which appears to be used by
+<a href="https://github.com/mikf/gallery-dl/blob/v1.25.5/gallery_dl/extractor/imgur.py#L413" referrerpolicy="noreferrer">major scraping libraries</a>.
+This fixes the API part, and I had to make some adjustments to the data models.</p>
+
+<p>But the album is still 404, so.</p>
+
+<h3 id="maybe-it-is-time-to-panic">Maybe it is time to panic</h3>
+
+<p>I did panic a little when I heard about the <a href="https://old.reddit.com/r/DataHoarder/comments/12sbch3/imgur_is_updating_their_tos_on_may_15_2023_all/" referrerpolicy="noreferrer">imgur NSFW fiasco</a>. I did make
+<em>some</em> preparations in case I get forced to close shop, and evaluated some
+alternatives. In the end, I concluded that the images should be fine, and I would
+backup the images regularly, in expectance of closing shop.</p>
+
+<p>With how things are going right now, I will be publishing all the links to whatever
+backup I have. Things are a little scattered, but this is not exactly a
+world class project to begin with. I just rolled with whatever worked for me.</p>
+
+<p>If you want to use the data, some notes:</p>
+
+<ol>
+  <li>The images are a direct ZIP download from imgur (e.g., <a href="https://imgur.com/a/yzKq60n/zip" referrerpolicy="noreferrer">https://imgur.com/a/yzKq60n/zip</a>),
+so the order of the images (like the album view), is messed up. You will
+probably have to cross reference the <code class="language-plaintext highlighter-rouge">imgur.json</code> to order it properly.</li>
+  <li>The image ZIP does not have the thumbnails.</li>
+  <li>The tags are in YAML because I was too lazy to write JSON. The keys are the
+imgur ID, and values are text tags.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">imgur.json</code> has all the basic data. To note a few, the imgur ID, created timestamp,
+size, file size, and others.</li>
+</ol>
+
+<p>I will still be maintaining this website from time to time. If imgur really forces
+me to close shop, I will re-setup things on a different host. Keeping the site
+up is the least I could do.</p>
+
+<p>Good luck, and have fun.</p>
+
+ 
+
+
+<hr/>
+
+<p>Generated with <a href="https://jekyllrb.com/" referrerpolicy="noreferrer">Jekyll</a> at 20 April 2024.</p>
+
+
+
+<ul class="list-inline">
+  
+  <li class="list-inline-item">
+    <a href="https://github.com/altbdoor/thes1tuation-memes" referrerpolicy="noreferrer">GitHub</a>
+  </li>
+  
+  <li class="list-inline-item">
+    <a href="https://bootswatch.com/" referrerpolicy="noreferrer">Bootswatch</a>
+  </li>
+  
+</ul>
+
+    </div>
+  
+
+</body></html>
