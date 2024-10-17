@@ -1,6 +1,6 @@
 FROM ruby:3.3-alpine as base
 
-ENV JEKYLL_VERSION="4.3.3"
+ENV JEKYLL_VERSION="4.3.4"
 
 # ==========
 
