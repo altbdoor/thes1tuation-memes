@@ -49,7 +49,7 @@ defaults:
       type: "pages"
     values:
       layout: "base"
-      permalink: /:path
+      permalink: /:path/
       excerpt: ""
   - scope:
       path: "_imgur"
