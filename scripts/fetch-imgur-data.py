@@ -5,7 +5,7 @@ import os
 import json
 import random
 import shutil
-from typing import TypedDict
+from typing import Dict, TypedDict
 from itertools import groupby
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -140,9 +140,9 @@ for year in unique_years:
             "\n".join(
                 [
                     "---",
-                    "layout: imgur",
+                    # "layout: imgur",
                     f"title: imgur {year}",
-                    f"year: {year}",
+                    f"data_year: {year}",
                     "---",
                 ]
             )

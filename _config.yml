@@ -4,7 +4,9 @@ title: TheS1tuation memes
 collections:
   imgur:
     output: true
-    sort_by: year
+    sort_by: data_year
+  pages:
+    output: true
 
 # Build settings
 plugins:
@@ -41,14 +43,19 @@ exclude:
 
 permalink: pretty
 
-# todo: https://github.com/jekyll/jekyll/issues/920#issuecomment-431742165
 defaults:
   - scope:
-      path: "pages"
+      path: ""
       type: "pages"
     values:
       layout: "base"
-      permalink: ":basename/"
+      permalink: /:path
+      excerpt: ""
+  - scope:
+      path: "_imgur"
+      type: "imgur"
+    values:
+      layout: "imgur"
 
 kramdown:
   parse_block_html: true

@@ -15,20 +15,19 @@ description: |
 
 {% for item in group.items %}
 <div class="card card-body p-2 mt-2">
-  <strong>{{ item.filename }}</strong>
-  {% assign file_ext = item.filename | split: '.' | last %}
+  <strong>{{ item.id }}</strong>
 
   <div class="mt-1">
-    {% if file_ext == 'mp3' %}
+    {% if item.type == 'audio' %}
     <audio
-      src="{{ site.baseurl }}/assets/audio/{{ item.filename }}"
+      src="{{ site.baseurl }}/assets/audio/{{ item.id }}"
       preload="metadata"
       controls
       loop
     ></audio>
-    {% elsif file_ext == 'mp4' %}
+    {% elsif item.type == 'video' %}
     <video
-      src="{{ site.baseurl }}/assets/video/{{ item.filename }}#t=0.1"
+      src="{{ site.baseurl }}/assets/video/{{ item.id }}#t=0.1"
       preload="metadata"
       controls
       playsinline

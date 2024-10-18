@@ -10,8 +10,7 @@ description: |
   {% include imgur-nav.html %}
 </div>
 
-{% assign all_tags = site.data.imgur-tags %}
-{% assign filter_groups = site.data.imgur-parsed | where_exp: "group", "group.name contains page.year" %}
+{% assign filter_groups = site.data.imgur-parsed | where_exp: "group", "group.name contains page.data_year" %}
 
 {% for group in filter_groups %}
 <h4 class="{% if forloop.index0 != 0 %}mt-4{% endif %}" id="{{ group.name | slugify }}">
@@ -25,10 +24,7 @@ description: |
 
 <div class="row">
   {% for item in group.items %}
-    {% assign current_tags = all_tags[item.id] %}
-    {% if current_tags == nil %}
-      {% assign current_tags = '' | split: ',' %}
-    {% endif %}
+    {% assign current_tags = item.tags %}
 
     {% if item.link contains '.gif' %}
       {% assign current_tags = current_tags | push: 'gif' %}
