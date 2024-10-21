@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -26,24 +25,7 @@ type ParsedDiscord struct {
 	GroupBy     string `json:"groupBy"`
 }
 
-type GroupParsedDiscord struct {
-	Name  string          `json:"name"`
-	Items []ParsedDiscord `json:"items"`
-}
-
-func main() {
-	// ========================================
-	// get base dir
-	// ========================================
-
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		fmt.Println("unable to retrieve script path")
-		os.Exit(1)
-	}
-
-	baseDir := filepath.Join(filepath.Dir(filename), "../../")
-
+func ParseDiscord(baseDir string) {
 	// ========================================
 	// read json data
 	// ========================================
@@ -81,10 +63,10 @@ func main() {
 	sort.Slice(parsedItems, func(i, j int) bool {
 		return parsedItems[i].Datetime > parsedItems[j].Datetime
 	})
-	fmt.Println("(i) finish parsing discord data")
+	fmt.Println("(i) discord: finish parsing discord data")
 
 	// ========================================
-	// parse json data
+	// grouping the images by month and year
 	// ========================================
 
 	itemsCount := len(parsedItems)
@@ -93,24 +75,17 @@ func main() {
 
 	for idx, item := range parsedItems {
 		item.Index = itemsCount - idx
+		group := item.GroupBy
 
-		if _, ok := groupedData[item.GroupBy]; ok {
-			groupedData[item.GroupBy] = append(groupedData[item.GroupBy], item)
-		} else {
-			orderedGroupKey = append(orderedGroupKey, item.GroupBy)
-			groupedData[item.GroupBy] = []ParsedDiscord{item}
+		if _, ok := groupedData[group]; !ok {
+			orderedGroupKey = append(orderedGroupKey, group)
 		}
+
+		groupedData[group] = append(groupedData[group], item)
 	}
 
-	orderedGroupData := make([]GroupParsedDiscord, len(orderedGroupKey))
-	for idx, key := range orderedGroupKey {
-		orderedGroupData[idx] = GroupParsedDiscord{
-			Name:  key,
-			Items: groupedData[key],
-		}
-	}
-
-	fmt.Printf("(i) grouped %d media into %d months\n", itemsCount, len(orderedGroupKey))
+	orderedGroupData := ConvertToGroupedData(orderedGroupKey, groupedData)
+	fmt.Printf("(i) discord: grouped %d media into %d months\n", itemsCount, len(orderedGroupKey))
 
 	// ========================================
 	// write the data to files
@@ -120,6 +95,6 @@ func main() {
 	jsonData, _ := json.MarshalIndent(orderedGroupData, "", "  ")
 	os.WriteFile(jekyllDataPath, jsonData, 0644)
 
-	fmt.Println("(i) finish writing json data to files")
+	fmt.Println("(i) discord: finish writing json data to files")
 
 }

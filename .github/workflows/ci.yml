@@ -26,13 +26,12 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version: "~1.23.2"
+          go-version-file: 'scripts/go.mod'
           cache: false
 
       - run: |
           go version
-          go run scripts/imgur/parse-imgur.go
-          go run scripts/discord/parse-discord.go
+          go run scripts/*.go -discord -imgur
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 

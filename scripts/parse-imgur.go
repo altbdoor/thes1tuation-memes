@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -50,24 +49,7 @@ type ParsedImage struct {
 	Tags        []string `json:"tags"`
 }
 
-type GroupParsedImage struct {
-	Name  string        `json:"name"`
-	Items []ParsedImage `json:"items"`
-}
-
-func main() {
-	// ========================================
-	// get base dir
-	// ========================================
-
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		fmt.Println("unable to retrieve script path")
-		os.Exit(1)
-	}
-
-	baseDir := filepath.Join(filepath.Dir(filename), "../../")
-
+func ParseImgur(baseDir string) {
 	// ========================================
 	// call imgur api
 	// ========================================
@@ -86,7 +68,7 @@ func main() {
 		fmt.Sprintf("Chrome/79.0.3945.%d Safari/537.%d", rand.Intn(9999), rand.Intn(99))
 
 	for _, id := range albumId {
-		fmt.Printf("(i) calling somewhat official imgur API for album ID %s\n", id)
+		fmt.Printf("(i) imgur: calling somewhat official imgur API for album ID %s\n", id)
 
 		albumUrl := fmt.Sprintf("https://api.imgur.com/post/v1/albums/%s?include=media,tags,account", id)
 		req, _ := http.NewRequest("GET", albumUrl, nil)
@@ -141,7 +123,7 @@ func main() {
 	}
 
 	tagsFile.Close()
-	fmt.Println("(i) loaded all tags")
+	fmt.Println("(i) imgur: loaded all tags")
 
 	// ========================================
 	// parsing images into custom format
@@ -156,20 +138,22 @@ func main() {
 		location, _ := time.LoadLocation("Asia/Kuala_Lumpur")
 		imgDate = imgDate.In(location)
 
-		thumbnail := strings.ReplaceAll(img.URL, img.ID, img.ID+"b")
+		imgId := img.ID
+
+		thumbnail := strings.ReplaceAll(img.URL, imgId, imgId+"b")
 		thumbnail = strings.ReplaceAll(thumbnail, ".gif", ".jpg")
 		thumbnail = strings.ReplaceAll(thumbnail, ".jpeg", ".jpg")
 
 		imgTags := []string{}
-		if _, ok := oldTagsMap[img.ID]; ok {
-			imgTags = oldTagsMap[img.ID]
+		if _, ok := oldTagsMap[imgId]; ok {
+			imgTags = oldTagsMap[imgId]
 		} else {
-			fmt.Printf("(i) unable to find tags for %s\n", img.ID)
+			fmt.Printf("(i) imgur: unable to find tags for %s\n", imgId)
 		}
 
 		parsedImage := ParsedImage{
 			Index:       -1,
-			ID:          img.ID,
+			ID:          imgId,
 			Datetime:    imgDate.Unix(),
 			Type:        img.MimeType,
 			Width:       img.Width,
@@ -189,7 +173,7 @@ func main() {
 	sort.Slice(parsedImages, func(i, j int) bool {
 		return parsedImages[i].Datetime > parsedImages[j].Datetime
 	})
-	fmt.Println("(i) finish parsing images")
+	fmt.Println("(i) imgur: finish parsing images")
 
 	// ========================================
 	// update the tags file
@@ -206,7 +190,7 @@ func main() {
 	}
 
 	tagsFile.Close()
-	fmt.Println("(i) finish updating the tags")
+	fmt.Println("(i) imgur: finish updating the tags")
 
 	// ========================================
 	// grouping the images by month and year
@@ -219,30 +203,19 @@ func main() {
 
 	for idx, img := range parsedImages {
 		img.Index = imagesCount - idx
+		group := img.GroupBy
 
-		if _, ok := uniqueYears[img.Year]; !ok {
-			uniqueYears[img.Year] = 0
+		uniqueYears[img.Year]++
+
+		if _, ok := groupedData[group]; !ok {
+			orderedGroupKey = append(orderedGroupKey, group)
 		}
 
-		uniqueYears[img.Year] += 1
-
-		if _, ok := groupedData[img.GroupBy]; ok {
-			groupedData[img.GroupBy] = append(groupedData[img.GroupBy], img)
-		} else {
-			orderedGroupKey = append(orderedGroupKey, img.GroupBy)
-			groupedData[img.GroupBy] = []ParsedImage{img}
-		}
+		groupedData[group] = append(groupedData[group], img)
 	}
 
-	orderedGroupData := make([]GroupParsedImage, len(orderedGroupKey))
-	for idx, key := range orderedGroupKey {
-		orderedGroupData[idx] = GroupParsedImage{
-			Name:  key,
-			Items: groupedData[key],
-		}
-	}
-
-	fmt.Printf("(i) grouped %d images into %d months\n", imagesCount, len(orderedGroupKey))
+	orderedGroupData := ConvertToGroupedData(orderedGroupKey, groupedData)
+	fmt.Printf("(i) imgur: grouped %d images into %d months\n", imagesCount, len(orderedGroupKey))
 
 	// ========================================
 	// write the data to files
@@ -255,7 +228,7 @@ func main() {
 	os.WriteFile(jekyllDataPath, jsonData, 0644)
 	os.WriteFile(assetDataPath, jsonData, 0644)
 
-	fmt.Println("(i) finish writing json data to files")
+	fmt.Println("(i) imgur: finish writing json data to files")
 
 	// ========================================
 	// writing the jekyll md files
@@ -286,6 +259,6 @@ func main() {
 		os.WriteFile(imgurRecordPath, byteContent, 0644)
 	}
 
-	fmt.Println("(i) finish writing imgur collections")
+	fmt.Println("(i) imgur: finish writing imgur collections")
 
 }
