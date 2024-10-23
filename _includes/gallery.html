@@ -1,0 +1,58 @@
+<div
+  class="blueimp-gallery blueimp-gallery-controls"
+  aria-label="image gallery"
+  aria-modal="true"
+  role="dialog"
+>
+  <div class="slides" aria-live="polite"></div>
+  <h3 class="title"></h3>
+  <a
+    class="prev"
+    aria-controls="blueimp-gallery"
+    aria-label="previous slide"
+    aria-keyshortcuts="ArrowLeft"
+  ></a>
+  <a
+    class="next"
+    aria-controls="blueimp-gallery"
+    aria-label="next slide"
+    aria-keyshortcuts="ArrowRight"
+  ></a>
+  <a
+    class="close"
+    aria-controls="blueimp-gallery"
+    aria-label="close"
+    aria-keyshortcuts="Escape"
+  ></a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/js/blueimp-gallery.min.js"></script>
+<script>
+  document.querySelector(".container").addEventListener("click", (evt) => {
+    const copyLink = evt.target.closest(".imgur-copy-link");
+    if (copyLink) {
+      evt.preventDefault();
+      navigator.clipboard.writeText(copyLink.getAttribute("href"));
+      return;
+    }
+
+    const imageLink = evt.target.closest("[data-image-id]");
+    if (imageLink) {
+      evt.preventDefault();
+      const id = imageLink.getAttribute("data-image-id");
+      const allLinks = [...document.querySelectorAll("[data-image-id]")];
+      const index = allLinks.findIndex((elem) =>
+        elem.getAttribute("data-image-id") === id
+      );
+
+      blueimp.Gallery(allLinks, {
+        event: evt,
+        index,
+        container: ".blueimp-gallery",
+        toggleControlsOnEnter: false,
+        toggleControlsOnSlideClick: false,
+      });
+      return;
+    }
+  });
+</script>

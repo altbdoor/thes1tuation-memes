@@ -1,0 +1,222 @@
+---
+layout: base
+title: imgur
+description: |
+  The meme database is growing.
+---
+
+<div class="mb-3">
+  {% include imgur-nav.html %}
+</div>
+
+<div x-data="root">
+  <div class="pb-3">
+    <label class="form-label">All tags</label>
+    <div class="d-flex gap-2 flex-wrap">
+      <template x-for="tag in uniqueTags">
+        <button
+          type="button"
+          class="btn"
+          :class="activeTags.includes(tag) ? 'btn-primary' : 'btn-secondary'"
+          x-text="tag"
+          @click="handleClick(tag)"
+        ></button>
+      </template>
+
+      <button
+        type="button"
+        class="btn btn-outline-danger"
+        :disabled="activeTags.length === 0"
+        @click="resetAll()"
+      >
+        Clear all tags
+      </button>
+    </div>
+  </div>
+
+  <div x-show="activeEntries.length === 0" class="alert alert-info">
+    <h4 x-show="activeTags.length === 0">
+      Select any tag above to get started!
+    </h4>
+    <h4 x-show="activeTags.length !== 0">No results found!</h4>
+    <p>
+      If you choose two or more tags, the filter will only show images that have
+      <b>all</b> of the selected tags.
+    </p>
+    <p>
+      For example, if you select "magomet" and "90d", you will see images that
+      include both tags.
+    </p>
+  </div>
+
+  <template x-for="(group, index) in activeEntries">
+    <div>
+      <h4 :class="index === 0 ? '' : 'mt-4'">
+        <span x-text="group.name"></span>
+        <span class="badge text-bg-info" x-text="group.items.length"></span>
+      </h4>
+
+      <div class="row">
+        <template x-for="item in group.items">
+          <div class="col-md-6 col-lg-4 mt-2">
+            <div class="card card-body p-2">
+              <div class="d-flex">
+                <a
+                  :href="item.link"
+                  :data-title="item.timeDisplay + ' - ' + item.tags.join(', ')"
+                  :data-image-id="item.id"
+                  :data-image-index="item.index"
+                >
+                  <img
+                    class="me-2"
+                    :src="item.thumbnail"
+                    width="120"
+                    height="120"
+                    loading="lazy"
+                    :alt="item.id"
+                  />
+                </a>
+                <div>
+                  <div class="mb-1">
+                    <strong x-text="item.timeDisplay"></strong>
+                  </div>
+                  <div class="mb-1">
+                    <template x-for="tag in item.tags">
+                      <span>
+                        <span
+                          class="badge text-bg-secondary"
+                          x-text="tag"
+                        ></span>
+                      </span>
+                    </template>
+                  </div>
+                  <div>
+                    <a
+                      :href="item.link"
+                      target="_blank"
+                      class="btn btn-sm btn-outline-info"
+                      title="Open image in new tab"
+                    >
+                      <i class="fa fa-share-square-o"></i>
+                    </a>
+
+                    <a
+                      :href="item.link"
+                      class="btn btn-sm btn-outline-info imgur-copy-link"
+                      title="Copy image URL"
+                    >
+                      <i class="fa fa-clipboard"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+</div>
+
+{% include gallery.html %}
+
+<script>
+  document.addEventListener("alpine:init", () => {
+    function root() {
+      return {
+        entries: [],
+        activeEntries: [],
+
+        /** @type {string[]} */
+        uniqueTags: [],
+
+        /** @type {string[]} */
+        activeTags: [],
+
+        getTagsFromUrl() {
+          const url = new URL(window.location.href);
+          return url.searchParams.getAll("tags");
+        },
+
+        async init() {
+          const data = await fetch("{{ site.baseurl }}/assets/imgur.json");
+          this.entries = await data.json();
+
+          this.uniqueTags = this.entries
+            .flatMap((group) => group.items)
+            .flatMap((item) => item.tags)
+            .filter((tag) => !!tag)
+            .filter((tag, idx, arr) => arr.indexOf(tag) === idx)
+            .sort();
+
+          this.activeTags = this.getTagsFromUrl();
+          this.filterActiveEntries();
+        },
+
+        handleClick(tag) {
+          if (this.activeTags.includes(tag)) {
+            this.activeTags = this.activeTags.filter((i) => i !== tag);
+          } else {
+            this.activeTags = [...this.activeTags, tag];
+          }
+
+          const newParams = new URLSearchParams();
+          this.activeTags.forEach((tag) => {
+            newParams.append("tags", tag);
+          });
+          window.history.replaceState(
+            undefined,
+            "",
+            "?" + newParams.toString(),
+          );
+
+          this.filterActiveEntries();
+        },
+
+        filterActiveEntries() {
+          if (this.activeTags.length === 0) {
+            this.activeEntries = [];
+            return;
+          }
+
+          this.activeEntries = this.entries
+            .map((group) => {
+              const filteredItems = group.items
+                .filter((item) => {
+                  return this.activeTags.every((tag) =>
+                    item.tags.includes(tag),
+                  );
+                })
+                .map((item) => {
+                  const tags = [...item.tags];
+
+                  if (item.link.includes(".gif")) {
+                    tags.push("gif");
+                  }
+
+                  return { ...item, tags: tags.sort() };
+                });
+
+              return {
+                ...group,
+                items: filteredItems,
+              };
+            })
+            .filter((group) => group.items.length > 0);
+        },
+
+        resetAll() {
+          this.activeTags = [];
+          this.activeEntries = [];
+          window.history.replaceState(undefined, "", "?");
+        },
+      };
+    }
+
+    Alpine.data("root", root);
+  });
+</script>
+<script
+  src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"
+  defer
+></script>

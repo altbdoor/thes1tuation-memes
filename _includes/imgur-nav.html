@@ -1,12 +1,21 @@
-{% for col in site.imgur reversed %}
-  <a
-    href="{{ site.baseurl }}{{ col.url }}"
-    class="btn {% if page.url == col.url %}btn-primary{% else %}btn-secondary{% endif %}"
-  >
-    Year {{ col.data_year }}
+<div class="d-flex gap-2 flex-wrap">
+  {% for col in site.imgur reversed %}
+    <a
+      href="{{ site.baseurl }}{{ col.url }}"
+      class="btn {% if page.url == col.url %}btn-primary{% else %}btn-secondary{% endif %}"
+    >
+      Year {{ col.data_year }}
 
-    <span class="badge rounded-pill text-bg-info">
-      {{ col.data_count }}
-    </span>
+      <span class="badge rounded-pill text-bg-info">
+        {{ col.data_count }}
+      </span>
+    </a>
+  {% endfor %}
+
+  <a
+    href="{{ site.baseurl }}/imgur/search"
+    class="btn {% if page.url == '/imgur/search/' %}btn-primary{% else %}btn-secondary{% endif %}"
+  >
+    Search
   </a>
-{% endfor %}
+</div>
