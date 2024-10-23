@@ -1,6 +1,6 @@
 ---
 title: imgur shadowban
-code: true
+render_code: true
 description: |
   Some memes are haram.
 ---

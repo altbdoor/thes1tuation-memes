@@ -1,6 +1,5 @@
 ---
-layout: base
-title: imgur
+title: imgur search
 description: |
   The meme database is growing.
 ---
@@ -9,19 +8,29 @@ description: |
   {% include imgur-nav.html %}
 </div>
 
+{% assign all_tags = "" | split: "" %}
+{% for item in site.data.imgur-tags %}
+  {% for tag in item[1] %}
+    {% if tag != "" %}
+      {% assign all_tags = all_tags | push: tag %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+{% assign unique_tags = all_tags | uniq | sort %}
+
 <div x-data="root">
   <div class="pb-3">
     <label class="form-label">All tags</label>
     <div class="d-flex gap-2 flex-wrap">
-      <template x-for="tag in uniqueTags">
+      {% for tag in unique_tags %}
         <button
           type="button"
           class="btn"
-          :class="activeTags.includes(tag) ? 'btn-primary' : 'btn-secondary'"
-          x-text="tag"
-          @click="handleClick(tag)"
-        ></button>
-      </template>
+          :class="activeTags.includes($el.textContent) ? 'btn-primary' : 'btn-secondary'"
+          @click="handleClick($el.textContent)"
+        >{{- tag -}}</button>
+      {% endfor %}
 
       <button
         type="button"
@@ -128,9 +137,6 @@ description: |
         activeEntries: [],
 
         /** @type {string[]} */
-        uniqueTags: [],
-
-        /** @type {string[]} */
         activeTags: [],
 
         getTagsFromUrl() {
@@ -141,13 +147,6 @@ description: |
         async init() {
           const data = await fetch("{{ site.baseurl }}/assets/imgur.json");
           this.entries = await data.json();
-
-          this.uniqueTags = this.entries
-            .flatMap((group) => group.items)
-            .flatMap((item) => item.tags)
-            .filter((tag) => !!tag)
-            .filter((tag, idx, arr) => arr.indexOf(tag) === idx)
-            .sort();
 
           this.activeTags = this.getTagsFromUrl();
           this.filterActiveEntries();
