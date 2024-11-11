@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -63,7 +63,7 @@ func ParseDiscord(baseDir string) {
 	sort.Slice(parsedItems, func(i, j int) bool {
 		return parsedItems[i].Datetime > parsedItems[j].Datetime
 	})
-	fmt.Println("(i) discord: finish parsing discord data")
+	log.Println("(i) discord: finish parsing discord data")
 
 	// ========================================
 	// grouping the images by month and year
@@ -85,7 +85,7 @@ func ParseDiscord(baseDir string) {
 	}
 
 	orderedGroupData := ConvertToGroupedData(orderedGroupKey, groupedData)
-	fmt.Printf("(i) discord: grouped %d media into %d months\n", itemsCount, len(orderedGroupKey))
+	log.Printf("(i) discord: grouped %d media into %d months\n", itemsCount, len(orderedGroupKey))
 
 	// ========================================
 	// write the data to files
@@ -95,6 +95,6 @@ func ParseDiscord(baseDir string) {
 	jsonData, _ := json.MarshalIndent(orderedGroupData, "", "  ")
 	os.WriteFile(jekyllDataPath, jsonData, 0644)
 
-	fmt.Println("(i) discord: finish writing json data to files")
+	log.Println("(i) discord: finish writing json data to files")
 
 }

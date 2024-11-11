@@ -29,9 +29,10 @@ jobs:
           go-version-file: 'scripts/go.mod'
           cache: false
 
-      - run: |
-          go version
-          go run scripts/*.go -discord -imgur
+      - name: Run main script
+        working-directory: "./scripts/"
+        run: |
+          go run ./*.go -discord -imgur
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 

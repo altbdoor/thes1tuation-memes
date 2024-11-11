@@ -2,8 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"os"
+	"log"
 	"path/filepath"
 	"runtime"
 	"sync"
@@ -20,8 +19,7 @@ func main() {
 
 	_, filename, _, ok := runtime.Caller(0)
 	if !ok {
-		fmt.Println("unable to retrieve script path")
-		os.Exit(1)
+		log.Fatalln("unable to retrieve script path")
 	}
 
 	baseDir := filepath.Join(filepath.Dir(filename), "../")

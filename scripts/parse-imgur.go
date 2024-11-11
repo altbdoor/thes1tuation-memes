@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -56,19 +57,20 @@ func ParseImgur(baseDir string) {
 
 	clientId := os.Getenv("IMGUR_CLIENT_ID")
 	if clientId == "" {
-		fmt.Println("please provide IMGUR_CLIENT_ID")
-		os.Exit(1)
+		log.Fatalln("please provide IMGUR_CLIENT_ID")
 	}
 
 	rawImages := []ImgurResponseMedia{}
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Minute,
+	}
 
 	userAgent := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
 		"AppleWebKit/537.36 (KHTML, like Gecko) " +
 		fmt.Sprintf("Chrome/79.0.3945.%d Safari/537.%d", rand.Intn(9999), rand.Intn(99))
 
 	for _, id := range albumId {
-		fmt.Printf("(i) imgur: calling somewhat official imgur API for album ID %s\n", id)
+		log.Printf("(i) imgur: calling somewhat official imgur API for album ID %s\n", id)
 
 		albumUrl := fmt.Sprintf("https://api.imgur.com/post/v1/albums/%s?include=media,tags,account", id)
 		req, _ := http.NewRequest("GET", albumUrl, nil)
@@ -78,23 +80,20 @@ func ParseImgur(baseDir string) {
 
 		resp, err := client.Do(req)
 		if err != nil {
-			fmt.Println("error sending request", err)
-			os.Exit(1)
+			log.Fatalln("error sending request", err)
 		}
 
 		body, err := io.ReadAll(resp.Body)
 		resp.Body.Close()
 
 		if err != nil {
-			fmt.Println("error reading body", err)
-			os.Exit(1)
+			log.Fatalln("error reading body", err)
 		}
 
 		var responseData ImgurResponse
 		err = json.Unmarshal(body, &responseData)
 		if err != nil {
-			fmt.Println("error parsing json", err)
-			os.Exit(1)
+			log.Fatalln("error parsing json", err)
 		}
 
 		rawImages = append(rawImages, responseData.Media...)
@@ -123,7 +122,7 @@ func ParseImgur(baseDir string) {
 	}
 
 	tagsFile.Close()
-	fmt.Println("(i) imgur: loaded all tags")
+	log.Println("(i) imgur: loaded all tags")
 
 	// ========================================
 	// parsing images into custom format
@@ -148,7 +147,7 @@ func ParseImgur(baseDir string) {
 		if _, ok := oldTagsMap[imgId]; ok {
 			imgTags = oldTagsMap[imgId]
 		} else {
-			fmt.Printf("(i) imgur: unable to find tags for %s\n", imgId)
+			log.Printf("(i) imgur: unable to find tags for %s\n", imgId)
 		}
 
 		parsedImage := ParsedImage{
@@ -173,7 +172,7 @@ func ParseImgur(baseDir string) {
 	sort.Slice(parsedImages, func(i, j int) bool {
 		return parsedImages[i].Datetime > parsedImages[j].Datetime
 	})
-	fmt.Println("(i) imgur: finish parsing images")
+	log.Println("(i) imgur: finish parsing images")
 
 	// ========================================
 	// update the tags file
@@ -190,7 +189,7 @@ func ParseImgur(baseDir string) {
 	}
 
 	tagsFile.Close()
-	fmt.Println("(i) imgur: finish updating the tags")
+	log.Println("(i) imgur: finish updating the tags")
 
 	// ========================================
 	// grouping the images by month and year
@@ -215,7 +214,7 @@ func ParseImgur(baseDir string) {
 	}
 
 	orderedGroupData := ConvertToGroupedData(orderedGroupKey, groupedData)
-	fmt.Printf("(i) imgur: grouped %d images into %d months\n", imagesCount, len(orderedGroupKey))
+	log.Printf("(i) imgur: grouped %d images into %d months\n", imagesCount, len(orderedGroupKey))
 
 	// ========================================
 	// write the data to files
@@ -228,7 +227,7 @@ func ParseImgur(baseDir string) {
 	os.WriteFile(jekyllDataPath, jsonData, 0644)
 	os.WriteFile(assetDataPath, jsonData, 0644)
 
-	fmt.Println("(i) imgur: finish writing json data to files")
+	log.Println("(i) imgur: finish writing json data to files")
 
 	// ========================================
 	// writing the jekyll md files
@@ -259,6 +258,6 @@ func ParseImgur(baseDir string) {
 		os.WriteFile(imgurRecordPath, byteContent, 0644)
 	}
 
-	fmt.Println("(i) imgur: finish writing imgur collections")
+	log.Println("(i) imgur: finish writing imgur collections")
 
 }

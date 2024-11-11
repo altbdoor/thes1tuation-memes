@@ -1,6 +1,7 @@
 FROM ruby:3.3-alpine as base
 
-ENV JEKYLL_VERSION="4.3.4"
+ENV JEKYLL_VERSION="4.3.4" \
+    RUBY_YJIT_ENABLE="true"
 
 # ==========
 
@@ -10,8 +11,10 @@ WORKDIR /app/
 
 RUN apk add build-base
 RUN bundle init \
-    && bundle add jekyll -v "$JEKYLL_VERSION" \
-    && bundle add minima jekyll-paginate-v2
+    && echo "gem 'jekyll', '$JEKYLL_VERSION'" >> Gemfile \
+    && echo "gem 'minima'" >> Gemfile \
+    && echo "gem 'jekyll-paginate-v2'" >> Gemfile \
+    && bundle install --jobs 2
 
 # ==========
 
