@@ -2,27 +2,27 @@
   <div class="container-fluid">
     <ul class="navbar-nav">
       {% for item in site.data.nav %}
-      <li class="nav-item">
-        <a
-          href="{{ site.baseurl }}{{ item.href }}"
-          class="nav-link {% if page.url == item.href %}active{% endif %}"
-        >
-          {{ item.name }}
+        <li class="nav-item">
+          <a
+            href="{{ site.baseurl }}{{ item.href }}"
+            class="nav-link {% if page.url == item.href %}active{% endif %}"
+          >
+            {{ item.name }}
 
-          {% if item.count_from %}
-            {% assign count = 0 %}
+            {% if item.count_from %}
+              {% assign count = 0 %}
 
-            {% for group in site.data[item.count_from] %}
-              {% assign group_size = group.items | size %}
-              {% assign count = count | plus: group_size %}
-            {% endfor %}
+              {% for group in site.data[item.count_from] %}
+                {% assign group_size = group.items | size %}
+                {% assign count = count | plus: group_size %}
+              {% endfor %}
 
-            <span class="badge rounded-pill text-bg-primary">
-              {{ count }}
-            </span>
-          {% endif %}
-        </a>
-      </li>
+              <span class="badge rounded-pill text-bg-primary">
+                {{ count }}
+              </span>
+            {% endif %}
+          </a>
+        </li>
       {% endfor %}
     </ul>
   </div>

@@ -1,39 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ page.title }} - {{ site.title }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      {{ page.title }}
+      -
+      {{ site.title }}
+    </title>
 
     <link
       rel="shortcut icon"
       href="{{ site.baseurl }}/assets/ok.png?v=2"
       type="image/png"
-    />
+    >
 
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/darkly/bootstrap.min.css"
-    />
+    >
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/css/blueimp-gallery.min.css"
-    />
+    >
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
-    />
+    >
     {% if page.render_code %}
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/richleland/pygments-css@master/monokai.css"
-    />
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/richleland/pygments-css@master/monokai.css"
+      >
     {% endif %}
 
     <link
       rel="stylesheet"
       href="{{ site.baseurl }}/assets/main.css"
-    />
+    >
   </head>
   <body>
     <div class="container pt-3 py-5">
@@ -44,7 +48,8 @@
 
       <div class="mb-3">{% include nav.html %}</div>
 
-      {{ content }} {% include footer.md %}
+      {{ content }}
+      {% include footer.md %}
     </div>
   </body>
 </html>

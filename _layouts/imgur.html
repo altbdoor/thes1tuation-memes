@@ -5,84 +5,83 @@ description: |
   The original album in imgur is [shadowbanned](../../imgur-shadowban/).
   Click on the image to open the gallery view.
 ---
-
 <div class="mb-3">
   {% include imgur-nav.html %}
 </div>
 
-{% assign filter_groups = site.data.imgur-parsed | where_exp: "group", "group.name contains page.data_year" %}
+{% assign filter_groups = site.data['imgur-parsed'] | where_exp: 'group', 'group.name contains page.data_year' %}
 
 {% for group in filter_groups %}
-<h4 class="{% if forloop.index0 != 0 %}mt-4{% endif %}" id="{{ group.name | slugify }}">
-  <a class="text-decoration-none" href="#{{ group.name | slugify }}">
-    <i class="fa fa-paperclip"></i>
-  </a>
+  <h4 class="{% if forloop.index0 != 0 %}mt-4{% endif %}" id="{{ group.name | slugify }}">
+    <a class="text-decoration-none" href="#{{ group.name | slugify }}">
+      <i class="fa fa-paperclip"></i>
+    </a>
 
-  {{ group.name }}
-  <span class="badge text-bg-info">{{ group.items | size }}</span>
-</h4>
+    {{ group.name }}
+    <span class="badge text-bg-info">{{ group.items | size }}</span>
+  </h4>
 
-<div class="row">
-  {% for item in group.items %}
-    {% assign current_tags = item.tags %}
+  <div class="row">
+    {% for item in group.items %}
+      {% assign current_tags = item.tags %}
 
-    {% if item.link contains '.gif' %}
-      {% assign current_tags = current_tags | push: 'gif' %}
-    {% endif %}
+      {% if item.link contains '.gif' %}
+        {% assign current_tags = current_tags | push: 'gif' %}
+      {% endif %}
 
-    {% assign current_tags = current_tags | sort %}
+      {% assign current_tags = current_tags | sort %}
 
-    <div class="col-md-6 col-lg-4 mt-2">
-      <div class="card card-body p-2">
-        <div class="d-flex">
-          <a
-            href="{{ item.link }}"
-            data-title="{{ item.timeDisplay }} - {{ current_tags | join: ', ' }}"
-            data-image-id="{{ item.id }}"
-            data-image-index="{{ item.index }}"
-          >
-            <img
-              class="me-2"
-              src="{{ item.thumbnail }}"
-              width="120"
-              height="120"
-              loading="lazy"
-              alt="{{ item.id }}"
-            />
-          </a>
-          <div>
-            <div class="mb-1">
-              <strong>{{ item.timeDisplay }}</strong>
-            </div>
-            <div class="mb-1">
-              {% for tag in current_tags %}
-              <span class="badge text-bg-secondary">{{ tag }}</span>
-              {% endfor %}
-            </div>
+      <div class="col-md-6 col-lg-4 mt-2">
+        <div class="card card-body p-2">
+          <div class="d-flex">
+            <a
+              href="{{ item.link }}"
+              data-title="{{ item.timeDisplay }} - {{ current_tags | join: ', ' }}"
+              data-image-id="{{ item.id }}"
+              data-image-index="{{ item.index }}"
+            >
+              <img
+                class="me-2"
+                src="{{ item.thumbnail }}"
+                width="120"
+                height="120"
+                loading="lazy"
+                alt="{{ item.id }}"
+              >
+            </a>
             <div>
-              <a
-                href="{{ item.link }}"
-                target="_blank"
-                class="btn btn-sm btn-outline-info"
-                title="Open image in new tab"
-              >
-                <i class="fa fa-share-square-o"></i>
-              </a>
+              <div class="mb-1">
+                <strong>{{ item.timeDisplay }}</strong>
+              </div>
+              <div class="mb-1">
+                {% for tag in current_tags %}
+                  <span class="badge text-bg-secondary">{{ tag }}</span>
+                {% endfor %}
+              </div>
+              <div>
+                <a
+                  href="{{ item.link }}"
+                  target="_blank"
+                  class="btn btn-sm btn-outline-info"
+                  title="Open image in new tab"
+                >
+                  <i class="fa fa-share-square-o"></i>
+                </a>
 
-              <a
-                href="{{ item.link }}"
-                class="btn btn-sm btn-outline-info imgur-copy-link"
-                title="Copy image URL"
-              >
-                <i class="fa fa-clipboard"></i>
-              </a>
+                <a
+                  href="{{ item.link }}"
+                  class="btn btn-sm btn-outline-info imgur-copy-link"
+                  title="Copy image URL"
+                >
+                  <i class="fa fa-clipboard"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
-</div>
+    {% endfor %}
+  </div>
 {% endfor %}
 
 {% include gallery.html %}

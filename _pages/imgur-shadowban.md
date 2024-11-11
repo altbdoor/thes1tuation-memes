@@ -60,12 +60,14 @@ for a week or so.
 For what its worth, the [imgur status page](https://status.imgur.com/) has been
 "fixing" an issue since May 12.
 
+<!-- prettier-ignore-start -->
 > **Ongoing intermittent issues loading content**
 >
 > We are working to address ongoing issues causing degraded performance across all platforms causing errors on apps, blank screens to appear, and generally wonky behavior.
 >
 > &mdash; <https://status.imgur.com/incidents/0g0nq22f38yh>
 {: .blockquote.ps-3.border-start.border-4.border-success}
+<!-- prettier-ignore-end -->
 
 ### Third failure, album is 404 for friends
 

@@ -3,15 +3,14 @@ title: imgur search
 description: |
   The meme database is growing.
 ---
-
 <div class="mb-3">
   {% include imgur-nav.html %}
 </div>
 
-{% assign all_tags = "" | split: "" %}
-{% for item in site.data.imgur-tags %}
+{% assign all_tags = '' | split: '' %}
+{% for item in site.data['imgur-tags'] %}
   {% for tag in item[1] %}
-    {% if tag != "" %}
+    {% if tag != '' %}
       {% assign all_tags = all_tags | push: tag %}
     {% endif %}
   {% endfor %}
@@ -29,7 +28,9 @@ description: |
           class="btn"
           :class="activeTags.includes($el.textContent) ? 'btn-primary' : 'btn-secondary'"
           @click="handleClick($el.textContent)"
-        >{{- tag -}}</button>
+        >
+          {{- tag -}}
+        </button>
       {% endfor %}
 
       <button
@@ -44,18 +45,13 @@ description: |
   </div>
 
   <div x-show="activeEntries.length === 0" class="alert alert-info">
-    <h4 x-show="activeTags.length === 0">
-      Select any tag above to get started!
-    </h4>
+    <h4 x-show="activeTags.length === 0">Select any tag above to get started!</h4>
     <h4 x-show="activeTags.length !== 0">No results found!</h4>
     <p>
       If you choose two or more tags, the filter will only show images that have
       <b>all</b> of the selected tags.
     </p>
-    <p>
-      For example, if you select "magomet" and "90d", you will see images that
-      include both tags.
-    </p>
+    <p>For example, if you select "magomet" and "90d", you will see images that include both tags.</p>
   </div>
 
   <template x-for="(group, index) in activeEntries">
@@ -83,7 +79,7 @@ description: |
                     height="120"
                     loading="lazy"
                     :alt="item.id"
-                  />
+                  >
                 </a>
                 <div>
                   <div class="mb-1">
@@ -130,7 +126,7 @@ description: |
 {% include gallery.html %}
 
 <script>
-  document.addEventListener("alpine:init", () => {
+  document.addEventListener('alpine:init', () => {
     function root() {
       return {
         entries: [],
@@ -141,11 +137,11 @@ description: |
 
         getTagsFromUrl() {
           const url = new URL(window.location.href);
-          return url.searchParams.getAll("tags");
+          return url.searchParams.getAll('tags');
         },
 
         async init() {
-          const data = await fetch("{{ site.baseurl }}/assets/imgur.json");
+          const data = await fetch('{{ site.baseurl }}/assets/imgur.json');
           this.entries = await data.json();
 
           this.activeTags = this.getTagsFromUrl();
@@ -161,13 +157,9 @@ description: |
 
           const newParams = new URLSearchParams();
           this.activeTags.forEach((tag) => {
-            newParams.append("tags", tag);
+            newParams.append('tags', tag);
           });
-          window.history.replaceState(
-            undefined,
-            "",
-            "?" + newParams.toString(),
-          );
+          window.history.replaceState(undefined, '', '?' + newParams.toString());
 
           this.filterActiveEntries();
         },
@@ -182,15 +174,13 @@ description: |
             .map((group) => {
               const filteredItems = group.items
                 .filter((item) => {
-                  return this.activeTags.every((tag) =>
-                    item.tags.includes(tag),
-                  );
+                  return this.activeTags.every((tag) => item.tags.includes(tag));
                 })
                 .map((item) => {
                   const tags = [...item.tags];
 
-                  if (item.link.includes(".gif")) {
-                    tags.push("gif");
+                  if (item.link.includes('.gif')) {
+                    tags.push('gif');
                   }
 
                   return { ...item, tags: tags.sort() };
@@ -207,12 +197,12 @@ description: |
         resetAll() {
           this.activeTags = [];
           this.activeEntries = [];
-          window.history.replaceState(undefined, "", "?");
+          window.history.replaceState(undefined, '', '?');
         },
       };
     }
 
-    Alpine.data("root", root);
+    Alpine.data('root', root);
   });
 </script>
 <script

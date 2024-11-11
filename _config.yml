@@ -30,12 +30,13 @@ exclude:
   - scripts/
   - LICENSE
   - README.md
+  - "package*.json"
+  - node_modules/
+  - .jekyll-cache/
 #   - .sass-cache/
-#   - .jekyll-cache/
 #   - gemfiles/
 #   - Gemfile
 #   - Gemfile.lock
-#   - node_modules/
 #   - vendor/bundle/
 #   - vendor/cache/
 #   - vendor/gems/
