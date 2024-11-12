@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {% assign full_title = page.title | append: ' - ' | append: site.title %}
+    {%- assign full_title = page.title | append: ' - ' | append: site.title -%}
     <title>{{ full_title }}</title>
 
     <link
@@ -13,23 +13,24 @@
       type="image/png"
     >
 
-    <meta property="og:url" content="https://altbdoor.github.io/thes1tuation-memes/">
+    {%- assign webpage_url = 'https://altbdoor.github.io/thes1tuation-memes' -%}
+    <meta property="og:url" content="{{ webpage_url }}{{ page.url }}">
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ full_title }}">
     <meta property="og:description" content="Small archive of the memes I made for the very cool dude, TheS1tuation">
     <meta
       property="og:image"
-      content="https://altbdoor.github.io/thes1tuation-memes/assets/ok.png?v=2"
+      content="{{ webpage_url }}/assets/ok.png?v=2"
     >
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="altbdoor.github.io">
-    <meta property="twitter:url" content="https://altbdoor.github.io/thes1tuation-memes/">
+    <meta property="twitter:url" content="{{ webpage_url }}{{ page.url }}">
     <meta name="twitter:title" content="{{ full_title }}">
     <meta name="twitter:description" content="Small archive of the memes I made for the very cool dude, TheS1tuation">
     <meta
       name="twitter:image"
-      content="https://altbdoor.github.io/thes1tuation-memes/assets/ok.png?v=2"
+      content="{{ webpage_url }}/assets/ok.png?v=2"
     >
 
     <meta name="date" content="{{ 'now' | date_to_xmlschema }}">
