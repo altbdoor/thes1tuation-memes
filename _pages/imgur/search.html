@@ -44,7 +44,7 @@ description: |
     </div>
   </div>
 
-  <div x-show="activeEntries.length === 0" class="alert alert-info">
+  <div x-show="!isLoading && resultCount === 0" class="alert alert-info">
     <h4 x-show="activeTags.length === 0">Select any tag above to get started!</h4>
     <h4 x-show="activeTags.length !== 0">No results found!</h4>
     <p>
@@ -53,75 +53,9 @@ description: |
     </p>
     <p>For example, if you select "magomet" and "90d", you will see images that include both tags.</p>
   </div>
-
-  <template x-for="(group, index) in activeEntries">
-    <div>
-      <h4 :class="index === 0 ? '' : 'mt-4'">
-        <span x-text="group.name"></span>
-        <span class="badge text-bg-info" x-text="group.items.length"></span>
-      </h4>
-
-      <div class="row">
-        <template x-for="item in group.items">
-          <div class="col-md-6 col-lg-4 mt-2">
-            <div class="card card-body p-2">
-              <div class="d-flex">
-                <a
-                  :href="item.link"
-                  :data-title="item.timeDisplay + ' - ' + item.tags.join(', ')"
-                  :data-image-id="item.id"
-                  :data-image-index="item.index"
-                >
-                  <img
-                    class="me-2"
-                    :src="item.thumbnail"
-                    width="120"
-                    height="120"
-                    loading="lazy"
-                    :alt="item.id"
-                  >
-                </a>
-                <div>
-                  <div class="mb-1">
-                    <strong x-text="item.timeDisplay"></strong>
-                  </div>
-                  <div class="mb-1">
-                    <template x-for="tag in item.tags">
-                      <span>
-                        <span
-                          class="badge text-bg-secondary"
-                          x-text="tag"
-                        ></span>
-                      </span>
-                    </template>
-                  </div>
-                  <div>
-                    <a
-                      :href="item.link"
-                      target="_blank"
-                      class="btn btn-sm btn-outline-info"
-                      title="Open image in new tab"
-                    >
-                      <i class="fa fa-share-square-o"></i>
-                    </a>
-
-                    <a
-                      :href="item.link"
-                      class="btn btn-sm btn-outline-info imgur-copy-link"
-                      title="Copy image URL"
-                    >
-                      <i class="fa fa-clipboard"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
-  </template>
 </div>
+
+<div id="search-container"></div>
 
 {% include gallery.html %}
 
@@ -129,11 +63,10 @@ description: |
   document.addEventListener('alpine:init', () => {
     function root() {
       return {
-        entries: [],
-        activeEntries: [],
-
         /** @type {string[]} */
         activeTags: [],
+        resultCount: 0,
+        isLoading: false,
 
         getTagsFromUrl() {
           const url = new URL(window.location.href);
@@ -141,62 +74,77 @@ description: |
         },
 
         async init() {
-          const data = await fetch('{{ site.baseurl }}/assets/imgur.json');
-          this.entries = await data.json();
-
           this.activeTags = this.getTagsFromUrl();
           this.filterActiveEntries();
         },
 
         handleClick(tag) {
           if (this.activeTags.includes(tag)) {
-            this.activeTags = this.activeTags.filter((i) => i !== tag);
+            this.activeTags = this.activeTags.filter((iterTag) => iterTag !== tag);
           } else {
             this.activeTags = [...this.activeTags, tag];
           }
 
           const newParams = new URLSearchParams();
-          this.activeTags.forEach((tag) => {
-            newParams.append('tags', tag);
+          this.activeTags.forEach((iterTag) => {
+            newParams.append('tags', iterTag);
           });
           window.history.replaceState(undefined, '', '?' + newParams.toString());
 
           this.filterActiveEntries();
         },
 
-        filterActiveEntries() {
+        async filterActiveEntries() {
+          const container = document.querySelector('#search-container');
+          container.innerHTML = '';
+          this.resultCount = 0;
+
           if (this.activeTags.length === 0) {
-            this.activeEntries = [];
             return;
           }
 
-          this.activeEntries = this.entries
-            .map((group) => {
-              const filteredItems = group.items
-                .filter((item) => {
-                  return this.activeTags.every((tag) => item.tags.includes(tag));
-                })
-                .map((item) => {
-                  const tags = [...item.tags];
+          this.isLoading = true;
+          const content = await fetch('{{ site.baseurl }}/imgur/all-index/').then((res) => res.text());
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(content, 'text/html');
 
-                  if (item.link.includes('.gif')) {
-                    tags.push('gif');
-                  }
+          const groups = doc.querySelectorAll('[data-search-group]');
+          groups.forEach((group) => {
+            group.querySelectorAll('[data-search-item-tags]').forEach((item) => {
+              const searchTags = item.getAttribute('data-search-item-tags');
+              const isItemMatch = this.activeTags.every((tag) => searchTags.includes(`|${tag}|`));
 
-                  return { ...item, tags: tags.sort() };
-                });
+              if (!isItemMatch) {
+                item.parentNode.removeChild(item);
+              }
+            });
 
-              return {
-                ...group,
-                items: filteredItems,
-              };
-            })
-            .filter((group) => group.items.length > 0);
+            const activeItems = group.querySelectorAll('[data-search-item-tags]');
+            this.resultCount = this.resultCount + activeItems.length;
+
+            if (activeItems.length > 0) {
+              group.querySelector('h4 > .badge').textContent = activeItems.length;
+              container.appendChild(group);
+            }
+          });
+
+          const headings = container.querySelectorAll('h4');
+          headings.forEach((heading, idx) => {
+            heading.classList.remove('mt-4');
+
+            if (idx > 0) {
+              heading.classList.add('mt-4');
+            }
+          });
+
+          this.isLoading = false;
         },
 
         resetAll() {
           this.activeTags = [];
-          this.activeEntries = [];
+          this.resultCount = 0;
+          this.isLoading = false;
+          this.filterActiveEntries();
           window.history.replaceState(undefined, '', '?');
         },
       };

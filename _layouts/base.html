@@ -3,11 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      {{ page.title }}
-      -
-      {{ site.title }}
-    </title>
+
+    {% assign full_title = page.title | append: ' - ' | append: site.title %}
+    <title>{{ full_title }}</title>
 
     <link
       rel="shortcut icon"
@@ -15,21 +13,48 @@
       type="image/png"
     >
 
+    <meta property="og:url" content="https://altbdoor.github.io/thes1tuation-memes/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ full_title }}">
+    <meta property="og:description" content="Small archive of the memes I made for the very cool dude, TheS1tuation">
+    <meta
+      property="og:image"
+      content="https://altbdoor.github.io/thes1tuation-memes/assets/ok.png?v=2"
+    >
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="altbdoor.github.io">
+    <meta property="twitter:url" content="https://altbdoor.github.io/thes1tuation-memes/">
+    <meta name="twitter:title" content="{{ full_title }}">
+    <meta name="twitter:description" content="Small archive of the memes I made for the very cool dude, TheS1tuation">
+    <meta
+      name="twitter:image"
+      content="https://altbdoor.github.io/thes1tuation-memes/assets/ok.png?v=2"
+    >
+
+    <meta name="date" content="{{ 'now' | date_to_xmlschema }}">
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/darkly/bootstrap.min.css"
     >
     <link
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      onload="this.onload=null; this.rel='stylesheet'"
       href="https://cdn.jsdelivr.net/npm/blueimp-gallery@3.4.0/css/blueimp-gallery.min.css"
     >
     <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="preload"
+      as="style"
+      onload="this.onload=null; this.rel='stylesheet'"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
     {% if page.render_code %}
       <link
-        rel="stylesheet"
+        rel="preload"
+        as="style"
+        onload="this.onload=null; this.rel='stylesheet'"
         href="https://cdn.jsdelivr.net/gh/richleland/pygments-css@master/monokai.css"
       >
     {% endif %}
@@ -43,8 +68,11 @@
     <div class="container pt-3 py-5">
       <h2>{{ site.title }}</h2>
 
-      {% if page.description %} {{ page.description | markdownify }} {% endif %}
-      {% if layout.description %} {{ layout.description | markdownify }} {% endif %}
+      {% if page.description %}
+        {{ page.description | markdownify }}
+      {% elsif layout.description %}
+        {{ layout.description | markdownify }}
+      {% endif %}
 
       <div class="mb-3">{% include nav.html %}</div>
 
