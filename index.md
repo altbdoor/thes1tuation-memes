@@ -5,11 +5,10 @@ description: |
   Small archive of the memes I made for the very cool dude,
   [TheS1tuation](https://www.twitch.tv/thes1tuation/).
 ---
-
 <style>
   .alert:after {
     position: absolute;
-    content: " ";
+    content: ' ';
     bottom: -1rem;
     left: calc(64px / 2 - 0.6rem);
     border-width: 1rem 0.6rem 0;
@@ -18,7 +17,7 @@ description: |
   }
 </style>
 
-<div class="alert alert-info position-relative">
+<div class="alert alert-info position-relative" markdown="1">
 
 Some of the memes are [NSFW](https://www.merriam-webster.com/dictionary/NSFW){: .alert-link} in nature. Please proceed at your own risk.
 

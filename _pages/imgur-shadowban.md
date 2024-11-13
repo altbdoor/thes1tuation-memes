@@ -5,7 +5,7 @@ description: |
   Some memes are haram.
 ---
 
-<div class="alert alert-primary">
+<div class="alert alert-primary" markdown="1">
 
 tldr; memes are safe in [here](../imgur/){: .alert-link}, you can find the backups here:
 
