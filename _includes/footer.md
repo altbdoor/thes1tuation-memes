@@ -1,6 +1,6 @@
 {% comment %}
-  note: html layout files cannot render markdown directly
-  https://talk.jekyllrb.com/t/rendering-markdown-inside-an-html-include/4186
+note: html layout files cannot render markdown directly
+https://talk.jekyllrb.com/t/rendering-markdown-inside-an-html-include/4186
 {% endcomment %}
 
 {% capture footer_content %}

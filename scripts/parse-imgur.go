@@ -170,6 +170,11 @@ func ParseImgur(baseDir string) {
 	}
 
 	sort.Slice(parsedImages, func(i, j int) bool {
+		// sort alphabetically for the same uploaded time
+		if parsedImages[i].Datetime == parsedImages[j].Datetime {
+			return parsedImages[i].ID > parsedImages[j].ID
+		}
+
 		return parsedImages[i].Datetime > parsedImages[j].Datetime
 	})
 	log.Println("(i) imgur: finish parsing images")
