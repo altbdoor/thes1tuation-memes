@@ -1,6 +1,9 @@
 # Site settings
 title: TheS1tuation memes
 
+# origin url
+url: https://altbdoor.github.io
+
 collections:
   imgur:
     output: true

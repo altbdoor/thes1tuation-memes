@@ -20,10 +20,10 @@
       {%- assign full_description = layout.description | markdownify %}
     {%- endif %}
 
-    <meta property="og:url" content="https://altbdoor.github.io/thes1tuation-memes{{ page.url }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ full_title }}">
-    <meta property="og:description" content="{{ full_description | strip_html | strip }}">
+    <meta name="description" property="og:description" content="{{ full_description | strip_html | strip }}">
     <meta name="twitter:card" content="summary">
 
     <meta name="date" content="{{ 'now' | date_to_xmlschema }}">
@@ -53,10 +53,7 @@
       >
     {% endif %}
 
-    <link
-      rel="stylesheet"
-      href="{{ site.baseurl }}/assets/main.css"
-    >
+    <link rel="stylesheet" href="{{ site.baseurl }}/assets/main.css">
   </head>
   <body>
     <div class="container pt-3 py-5">

@@ -43,13 +43,20 @@ jobs:
       - uses: actions/configure-pages@v5
         id: pages
 
-      - name: Build the Docker image
+      - name: Run the Docker image
         run: |
           if [[ "$(docker images --quiet $IMAGE_NAME 2> /dev/null)" == "" ]]; then
-              docker build . --file Dockerfile --tag $IMAGE_NAME
+            docker build . --file Dockerfile --tag $IMAGE_NAME
           fi
 
-          docker run --rm --volume "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+          JEKYLL_URL="${{ steps.pages.outputs.origin }}"
+          JEKYLL_BASEURL="${{ steps.pages.outputs.base_path }}"
+          sed -i "s|^url: .*|url: $JEKYLL_URL|" _config.yml
+
+          echo "(i) JEKYLL_URL = $JEKYLL_URL"
+          echo "(i) JEKYLL_BASEURL = $JEKYLL_URL"
+
+          docker run --rm --volume "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "$JEKYLL_BASEURL"
           sudo chown -R $(id -u):$(id -g) ./_site/
         env:
           IMAGE_NAME: jekyll-dev:latest
