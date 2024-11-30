@@ -54,7 +54,7 @@ jobs:
           sed -i "s|^url: .*|url: $JEKYLL_URL|" _config.yml
 
           echo "(i) JEKYLL_URL = $JEKYLL_URL"
-          echo "(i) JEKYLL_BASEURL = $JEKYLL_URL"
+          echo "(i) JEKYLL_BASEURL = $JEKYLL_BASEURL"
 
           docker run --rm --volume "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "$JEKYLL_BASEURL"
           sudo chown -R $(id -u):$(id -g) ./_site/
