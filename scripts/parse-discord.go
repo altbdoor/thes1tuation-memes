@@ -41,9 +41,28 @@ func ParseDiscord(baseDir string) {
 	// ========================================
 
 	parsedItems := make([]ParsedDiscord, len(rawData))
+	dateFormats := []string{
+		"01/02/2006 3:04 PM",
+		"1/2/2006, 3:04 PM",
+	}
 
 	for idx, item := range rawData {
-		itemDate, _ := time.Parse("01/02/2006 3:04 PM", item.Timestamp)
+		var (
+			itemDate      time.Time
+			dateFormatErr error
+		)
+
+		for _, format := range dateFormats {
+			itemDate, dateFormatErr = time.Parse(format, item.Timestamp)
+
+			if dateFormatErr == nil {
+				break
+			}
+		}
+
+		if dateFormatErr != nil {
+			log.Fatalln("unable to parse the date format!", dateFormatErr)
+		}
 
 		itemType := "audio"
 		if strings.HasSuffix(item.Filename, ".mp4") {
