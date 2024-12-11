@@ -11,6 +11,7 @@ import (
 func main() {
 	discordFlag := flag.Bool("discord", false, "Parse Discord data")
 	imgurFlag := flag.Bool("imgur", false, "Parse imgur data")
+	uploadFlag := flag.String("upload", "", "Upload media to Cloudinary")
 	flag.Parse()
 
 	// ========================================
@@ -39,6 +40,10 @@ func main() {
 			defer wg.Done()
 			ParseImgur(baseDir)
 		}()
+	}
+
+	if *uploadFlag != "" {
+		UploadCloud(*uploadFlag)
 	}
 
 	wg.Wait()

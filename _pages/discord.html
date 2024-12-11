@@ -18,14 +18,14 @@ description: |
       <div class="mt-1">
         {% if item.type == 'audio' %}
           <audio
-            src="{{ site.baseurl }}/assets/audio/{{ item.id }}"
+            src="{{ item.link }}"
             preload="metadata"
             controls
             loop
           ></audio>
         {% elsif item.type == 'video' %}
           <video
-            src="{{ site.baseurl }}/assets/video/{{ item.id }}#t=0.1"
+            src="{{ item.link }}#t=0.1"
             preload="metadata"
             controls
             playsinline
@@ -35,7 +35,6 @@ description: |
       </div>
     </div>
   {% endfor %}
-  <!-- loop -->
 {% endfor %}
 
 <script>

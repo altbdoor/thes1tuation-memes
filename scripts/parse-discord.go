@@ -23,6 +23,7 @@ type ParsedDiscord struct {
 	Type        string `json:"type"`
 	TimeDisplay string `json:"timeDisplay"`
 	GroupBy     string `json:"groupBy"`
+	Link        string `json:"link"`
 }
 
 func ParseDiscord(baseDir string) {
@@ -76,6 +77,7 @@ func ParseDiscord(baseDir string) {
 			Type:        itemType,
 			TimeDisplay: itemDate.Format("02 Jan, 03:04 PM"),
 			GroupBy:     itemDate.Format("January 2006"),
+			Link:        "https://res.cloudinary.com/dsakciquw/video/upload/fl_original/" + item.Filename,
 		}
 	}
 
