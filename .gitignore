@@ -9,3 +9,5 @@ assets/imgur.json
 _imgur/*.md
 
 node_modules
+assets/audio/
+assets/video/
