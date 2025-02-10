@@ -3,8 +3,8 @@
     "pretty": "prettier -wu --log-level warn \"**/*\""
   },
   "devDependencies": {
-    "@shopify/prettier-plugin-liquid": "^1.7.0",
-    "prettier": "^3.4.2"
+    "@shopify/prettier-plugin-liquid": "^1.8.0",
+    "prettier": "^3.5.0"
   },
   "engineStrict": true,
   "engines": {

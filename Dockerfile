@@ -1,11 +1,11 @@
-FROM ruby:3.3-alpine as base
+FROM ruby:3.3-alpine AS base
 
-ENV JEKYLL_VERSION="4.3.4" \
+ENV JEKYLL_VERSION="4.4.1" \
     RUBY_YJIT_ENABLE="true"
 
 # ==========
 
-FROM base as builder
+FROM base AS builder
 
 WORKDIR /app/
 
@@ -20,8 +20,10 @@ RUN bundle init \
 
 # ==========
 
-FROM base as app
+FROM base AS app
 
+# eventmachine requires access to c++ libs
+RUN apk add libstdc++
 COPY --from=builder /app /app
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 
