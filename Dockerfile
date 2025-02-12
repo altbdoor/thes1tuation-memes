@@ -1,4 +1,4 @@
-FROM ruby:3.3-alpine AS base
+FROM ruby:3.3-slim-bookworm AS base
 
 ENV JEKYLL_VERSION="4.4.1" \
     RUBY_YJIT_ENABLE="true"
@@ -9,7 +9,9 @@ FROM base AS builder
 
 WORKDIR /app/
 
-RUN apk add build-base
+RUN apt-get update -qq \
+    && apt-get install -yqq build-essential
+
 RUN bundle init \
     && echo "gem 'jekyll', '$JEKYLL_VERSION'" >> Gemfile \
     && echo "gem 'minima'" >> Gemfile \
@@ -22,8 +24,6 @@ RUN bundle init \
 
 FROM base AS app
 
-# eventmachine requires access to c++ libs
-RUN apk add libstdc++
 COPY --from=builder /app /app
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 
