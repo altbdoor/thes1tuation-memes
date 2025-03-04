@@ -12,7 +12,7 @@ tldr; memes are safe in [here](../imgur/){: .alert-link}, you can find the backu
 1. [Images part 1 (55.2 MB)](https://f000.backblazeb2.com/file/thes1tuation-memes/magomet.zip)
 1. [Images part 2 (26.3 MB)](https://f000.backblazeb2.com/file/thes1tuation-memes/magomet2.zip)
 1. [Raw JSON data]({{ site.baseurl }}/assets/imgur.json)
-1. Last image backup on 3 Jan, 2025
+1. Last image backup on 4 Mar, 2025
 
 </div>
 
