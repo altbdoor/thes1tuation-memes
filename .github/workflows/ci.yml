@@ -19,7 +19,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     env:
       JEKYLL_IMG_NAME: jekyll-dev:latest
-      JEKYLL_TAR_NAME: jekyll-img.tar
+      JEKYLL_TAR_NAME: /tmp/jekyll-img.tar
 
     runs-on: ubuntu-latest
     steps:
