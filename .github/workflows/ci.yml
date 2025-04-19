@@ -17,6 +17,9 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      JEKYLL_IMG_NAME: jekyll-dev:latest
+      JEKYLL_TAR_NAME: jekyll-img.tar
 
     runs-on: ubuntu-latest
     steps:
@@ -36,19 +39,27 @@ jobs:
         env:
           IMGUR_CLIENT_ID: ${{ secrets.IMGUR_CLIENT_ID }}
 
-      - uses: ScribeMD/docker-cache@0.5.0
+      - uses: actions/cache@v4
+        id: restore-docker
         with:
+          path: ${{ env.JEKYLL_TAR_NAME }}
           key: docker-${{ hashFiles('**/Dockerfile') }}
+
+      - name: Load Docker image cache
+        if: steps.restore-docker.outputs.cache-hit == 'true'
+        run: docker load --input $JEKYLL_TAR_NAME
+
+      - name: Build Docker image when cache is missing
+        if: steps.restore-docker.outputs.cache-hit != 'true'
+        run: |
+          docker build . --file Dockerfile --tag $JEKYLL_IMG_NAME
+          docker save --output $JEKYLL_TAR_NAME $JEKYLL_IMG_NAME
 
       - uses: actions/configure-pages@v5
         id: pages
 
       - name: Run the Docker image
         run: |
-          if [[ "$(docker images --quiet $IMAGE_NAME 2> /dev/null)" == "" ]]; then
-            docker build . --file Dockerfile --tag $IMAGE_NAME
-          fi
-
           JEKYLL_URL="${{ steps.pages.outputs.origin }}"
           JEKYLL_BASEURL="${{ steps.pages.outputs.base_path }}"
           sed -i "s|^url: .*|url: $JEKYLL_URL|" _config.yml
@@ -56,10 +67,8 @@ jobs:
           echo "(i) JEKYLL_URL = $JEKYLL_URL"
           echo "(i) JEKYLL_BASEURL = $JEKYLL_BASEURL"
 
-          docker run --rm --volume "$PWD:/srv" $IMAGE_NAME jekyll build --baseurl "$JEKYLL_BASEURL"
+          docker run --rm --volume "$PWD:/srv" $JEKYLL_IMG_NAME jekyll build --baseurl "$JEKYLL_BASEURL"
           sudo chown -R $(id -u):$(id -g) ./_site/
-        env:
-          IMAGE_NAME: jekyll-dev:latest
 
       - name: Sanitize referrer policy
         run: |
