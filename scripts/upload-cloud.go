@@ -11,6 +11,10 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 )
 
+// uploads the file to cloudinary, used for the migration of discord media.
+// usage example:
+//
+//	CLOUDINARY_USER=api-key:api-secret go run *.go -upload 'path/to/file.mp4'
 func UploadCloud(pathToFile string) {
 	cloudKeys := os.Getenv("CLOUDINARY_USER")
 	if cloudKeys == "" {
@@ -18,9 +22,16 @@ func UploadCloud(pathToFile string) {
 	}
 
 	cloudKeySecretPair := strings.Split(cloudKeys, ":")
-	cloudClient, _ := cloudinary.NewFromParams("dsakciquw", cloudKeySecretPair[0], cloudKeySecretPair[1])
+	cloudClient, err := cloudinary.NewFromParams("dsakciquw", cloudKeySecretPair[0], cloudKeySecretPair[1])
+	if err != nil {
+		log.Fatalln("(!) cloudinary: unable to init API")
+	}
 
-	cleanPath, _ := filepath.Abs(pathToFile)
+	cleanPath, err := filepath.Abs(pathToFile)
+	if err != nil {
+		log.Fatalf("(!) cloudinary: unable to standardize %s\n", pathToFile)
+	}
+
 	log.Println("(i) cloudinary: uploading", cleanPath)
 	mediaFile, err := os.Open(cleanPath)
 
