@@ -1,7 +1,9 @@
 FROM docker.io/library/ruby:3.3-slim-bookworm AS base
 
 ENV JEKYLL_VERSION="4.4.1" \
-    RUBY_YJIT_ENABLE="true"
+    RUBY_YJIT_ENABLE="true" \
+    DEBIAN_FRONTEND=noninteractive \
+    BUNDLE_GEMFILE=/app/Gemfile
 
 # ==========
 
@@ -10,15 +12,13 @@ FROM base AS builder
 WORKDIR /app/
 
 RUN apt-get update -qq \
-    && apt-get install -yqq build-essential
+    && apt-get install -yqq --no-install-recommends build-essential
 
 RUN bundle init \
     && echo "gem 'jekyll', '$JEKYLL_VERSION'" >> Gemfile \
     && echo "gem 'minima'" >> Gemfile \
     && echo "gem 'jekyll-paginate-v2'" >> Gemfile \
-    # https://github.com/protocolbuffers/protobuf/issues/19932
-    && echo "gem 'google-protobuf', '< 4.29.3'" >> Gemfile \
-    && bundle install --jobs 2
+    && bundle install --jobs $(nproc)
 
 # ==========
 
