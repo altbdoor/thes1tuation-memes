@@ -68,7 +68,9 @@ jobs:
           echo "(i) JEKYLL_URL = $JEKYLL_URL"
           echo "(i) JEKYLL_BASEURL = $JEKYLL_BASEURL"
 
-          docker run --rm --volume "$PWD:/srv" $JEKYLL_IMG_NAME jekyll build --baseurl "$JEKYLL_BASEURL"
+          docker run --rm --volume "$PWD:/srv" $JEKYLL_IMG_NAME \
+            bundle exec jekyll build --baseurl "$JEKYLL_BASEURL"
+
           sudo chown -R $(id -u):$(id -g) ./_site/
 
       - name: Sanitize referrer policy
