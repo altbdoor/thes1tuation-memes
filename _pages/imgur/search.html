@@ -23,19 +23,31 @@ description: |
     <label class="form-label">All tags</label>
     <div class="d-flex gap-2 flex-wrap">
       {% for tag in unique_tags %}
-        <button
-          type="button"
-          class="btn"
-          :class="activeTags.includes($el.textContent) ? 'btn-primary' : 'btn-secondary'"
-          @click="handleClick($el.textContent)"
-        >
-          {{- tag -}}
-        </button>
+        <div class="btn-group btn-group-sm">
+          <button
+            type="button"
+            class="btn"
+            :class="activeTags.includes('{{ tag }}') ? 'btn-primary' : 'btn-secondary'"
+            @click="handleClick('{{ tag }}', false)"
+          >
+            {{- tag -}}
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            @click="handleClick('{{ tag }}', true)"
+          >
+            <i
+              class="bi"
+              :class="activeTags.includes('{{ tag }}') ? 'bi-dash' : 'bi-plus'"
+            ></i>
+          </button>
+        </div>
       {% endfor %}
 
       <button
         type="button"
-        class="btn btn-outline-danger"
+        class="btn btn-sm btn-outline-danger"
         :disabled="activeTags.length === 0"
         @click="resetAll()"
       >
@@ -78,11 +90,23 @@ description: |
           this.filterActiveEntries();
         },
 
-        handleClick(tag) {
+        /**
+          @param {string} tag
+          @param {boolean} append
+         */
+        handleClick(tag, append) {
           if (this.activeTags.includes(tag)) {
-            this.activeTags = this.activeTags.filter((iterTag) => iterTag !== tag);
+            if (append) {
+              this.activeTags = this.activeTags.filter((iterTag) => iterTag !== tag);
+            } else {
+              this.activeTags = [tag];
+            }
           } else {
-            this.activeTags = [...this.activeTags, tag];
+            if (append) {
+              this.activeTags = [...this.activeTags, tag];
+            } else {
+              this.activeTags = [tag];
+            }
           }
 
           const newParams = new URLSearchParams();
@@ -154,6 +178,6 @@ description: |
   });
 </script>
 <script
-  src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"
+  src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js"
   defer
 ></script>
