@@ -1,5 +1,5 @@
-github.com/cloudinary/cloudinary-go/v2 v2.9.1 h1:YmR1+ayli8daanfUP8lKjOAFyK/wNJGBcLIUgK9YX8U=
-github.com/cloudinary/cloudinary-go/v2 v2.9.1/go.mod h1:ireC4gqVetsjVhYlwjUJwKTbZuWjEIynbR9zQTlqsvo=
+github.com/cloudinary/cloudinary-go/v2 v2.10.1 h1:4qyuFW6vufjLPTtZBeuu1jVFszzVi4rSwf6kAz0U2EA=
+github.com/cloudinary/cloudinary-go/v2 v2.10.1/go.mod h1:ireC4gqVetsjVhYlwjUJwKTbZuWjEIynbR9zQTlqsvo=
 github.com/creasty/defaults v1.8.0 h1:z27FJxCAa0JKt3utc0sCImAEb+spPucmKoOdLHvHYKk=
 github.com/creasty/defaults v1.8.0/go.mod h1:iGzKe6pbEHnpMPtfDXZEr0NVxWnPTjb1bbDy08fPzYM=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
