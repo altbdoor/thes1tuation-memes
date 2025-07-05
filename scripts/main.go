@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+	"log/slog"
+	"os"
 	"path/filepath"
 	"runtime"
 	"sync"
@@ -12,7 +14,17 @@ func main() {
 	discordFlag := flag.Bool("discord", false, "Parse Discord data")
 	imgurFlag := flag.Bool("imgur", false, "Parse imgur data")
 	uploadFlag := flag.String("upload", "", "Upload media to Cloudinary")
+	backupFlag := flag.Bool("backup", false, "Backup media to Backblaze")
 	flag.Parse()
+
+	// ========================================
+	// logger
+	// ========================================
+
+	baseLogger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
+	var logger *slog.Logger
 
 	// ========================================
 	// get base dir
@@ -24,6 +36,25 @@ func main() {
 	}
 
 	baseDir := filepath.Join(filepath.Dir(filename), "../")
+
+	// ========================================
+	// quick operations
+	// ========================================
+
+	if *uploadFlag != "" {
+		UploadCloud(*uploadFlag)
+		return
+	}
+
+	if *backupFlag {
+		logger = baseLogger.With("fn", "BackupB2")
+		BackupB2(logger)
+		return
+	}
+
+	// ========================================
+	// sync-able operations
+	// ========================================
 	var wg sync.WaitGroup
 
 	if *discordFlag {
@@ -40,10 +71,6 @@ func main() {
 			defer wg.Done()
 			ParseImgur(baseDir)
 		}()
-	}
-
-	if *uploadFlag != "" {
-		UploadCloud(*uploadFlag)
 	}
 
 	wg.Wait()
