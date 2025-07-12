@@ -14,7 +14,7 @@ func main() {
 	discordFlag := flag.Bool("discord", false, "Parse Discord data")
 	imgurFlag := flag.Bool("imgur", false, "Parse imgur data")
 	uploadFlag := flag.String("upload", "", "Upload media to Cloudinary")
-	backupFlag := flag.Bool("backup", false, "Backup media to Backblaze")
+	backupFlag := flag.String("backup", "", "Path to backup media to Backblaze")
 	flag.Parse()
 
 	// ========================================
@@ -46,9 +46,9 @@ func main() {
 		return
 	}
 
-	if *backupFlag {
+	if *backupFlag != "" {
 		logger = baseLogger.With("fn", "BackupB2")
-		BackupB2(logger)
+		BackupB2(logger, *backupFlag)
 		return
 	}
 

@@ -21,7 +21,7 @@ func UploadCloud(pathToFile string) {
 		log.Fatalln("(!) cloudinary: invalid key secret pair")
 	}
 
-	cloudKeySecretPair := strings.Split(cloudKeys, ":")
+	cloudKeySecretPair := strings.SplitN(cloudKeys, ":", 2)
 	cloudClient, err := cloudinary.NewFromParams("dsakciquw", cloudKeySecretPair[0], cloudKeySecretPair[1])
 	if err != nil {
 		log.Fatalln("(!) cloudinary: unable to init API")

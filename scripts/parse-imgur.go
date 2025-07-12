@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
+	"math/rand/v2"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -67,7 +67,7 @@ func ParseImgur(baseDir string) {
 
 	userAgent := "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
 		"AppleWebKit/537.36 (KHTML, like Gecko) " +
-		fmt.Sprintf("Chrome/79.0.3945.%d Safari/537.%d", rand.Intn(9999), rand.Intn(99))
+		fmt.Sprintf("Chrome/79.0.3945.%d Safari/537.%d", rand.IntN(9999), rand.IntN(99))
 
 	for _, id := range albumId {
 		log.Printf("(i) imgur: calling somewhat official imgur API for album ID %s\n", id)
