@@ -4,8 +4,8 @@ render_code: true
 description: |
   Some memes are haram.
 magomet2_info:
-  size: 29.2
-  date: 2025-07-12
+  size: 31.7
+  date: 2025-08-09
 ---
 
 <div class="alert alert-primary" markdown="1">
