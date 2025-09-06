@@ -44,17 +44,17 @@ jobs:
         id: restore-docker
         with:
           path: ${{ env.JEKYLL_TAR_NAME }}
-          key: docker-${{ hashFiles('**/Dockerfile') }}
+          key: podman-${{ hashFiles('**/Dockerfile') }}
 
       - name: Load Docker image cache
         if: steps.restore-docker.outputs.cache-hit == 'true'
-        run: docker load --input $JEKYLL_TAR_NAME
+        run: podman load --input $JEKYLL_TAR_NAME
 
       - name: Build Docker image when cache is missing
         if: steps.restore-docker.outputs.cache-hit != 'true'
         run: |
-          docker build . --file Dockerfile --tag $JEKYLL_IMG_NAME
-          docker save --output $JEKYLL_TAR_NAME $JEKYLL_IMG_NAME
+          podman build . --file Dockerfile --tag $JEKYLL_IMG_NAME
+          podman save --output $JEKYLL_TAR_NAME $JEKYLL_IMG_NAME
 
       - uses: actions/configure-pages@v5
         id: pages
@@ -68,10 +68,10 @@ jobs:
           echo "(i) JEKYLL_URL = $JEKYLL_URL"
           echo "(i) JEKYLL_BASEURL = $JEKYLL_BASEURL"
 
-          docker run --rm --volume "$PWD:/srv" $JEKYLL_IMG_NAME \
+          podman run --rm --volume "$PWD:/srv" $JEKYLL_IMG_NAME \
             bundle exec jekyll build --baseurl "$JEKYLL_BASEURL"
 
-          sudo chown -R $(id -u):$(id -g) ./_site/
+          # sudo chown -R $(id -u):$(id -g) ./_site/
 
       - name: Sanitize referrer policy
         run: |
