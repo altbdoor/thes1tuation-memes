@@ -5,7 +5,7 @@ description: |
   Some memes are haram.
 magomet2_info:
   size: 33.1
-  date: 2025-10-12
+  date: 2025-10-31
 ---
 
 <div class="alert alert-primary" markdown="1">
