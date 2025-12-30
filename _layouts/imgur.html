@@ -15,6 +15,8 @@ description: |
   {% assign filter_groups = site.data['imgur-parsed'] %}
 {% endif %}
 
+{% assign proxy = 'https://external-content.duckduckgo.com/iu/?u=' %}
+
 {% for group in filter_groups %}
   <div data-search-group>
     <h4 class="{% if forloop.index0 != 0 %}mt-4{% endif %}" id="{{ group.name | slugify }}">
@@ -42,14 +44,14 @@ description: |
           <div class="card card-body p-2">
             <div class="d-flex">
               <a
-                href="{{ item.link }}"
+                href="{{ proxy }}{{ item.link }}"
                 data-title="{{ item.timeDisplay }} - {{ current_tags | join: ', ' }}"
                 data-image-id="{{ item.id }}"
                 data-image-index="{{ item.index }}"
               >
                 <img
                   class="me-2"
-                  src="{{ item.thumbnail }}"
+                  src="{{ proxy }}{{ item.thumbnail }}"
                   width="120"
                   height="120"
                   loading="lazy"
