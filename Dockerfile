@@ -1,4 +1,4 @@
-FROM docker.io/library/ruby:3.3-slim-bookworm AS base
+FROM docker.io/library/ruby:3.3-slim-trixie AS base
 
 ENV JEKYLL_VERSION="4.4.1" \
     RUBY_YJIT_ENABLE="true" \

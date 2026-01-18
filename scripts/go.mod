@@ -1,6 +1,6 @@
 module github.com/altbdoor/thes1tuation-memes/scripts
 
-go 1.24
+go 1.25
 
 require (
 	github.com/cloudinary/cloudinary-go/v2 v2.10.1
