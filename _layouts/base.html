@@ -28,9 +28,13 @@
 
     <meta name="date" content="{{ 'now' | date_to_xmlschema }}">
 
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.7/dist/darkly/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/darkly/bootstrap.min.css"
     >
     <link
       rel="preload"
@@ -49,7 +53,7 @@
         rel="preload"
         as="style"
         onload="this.onload=null; this.rel='stylesheet'"
-        href="https://cdn.jsdelivr.net/gh/richleland/pygments-css@master/monokai.css"
+        href="https://cdn.jsdelivr.net/gh/richleland/pygments-css@c39da1d/monokai.css"
       >
     {% endif %}
 

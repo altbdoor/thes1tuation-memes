@@ -5,7 +5,7 @@ description: |
 ---
 
 <a class="text-center d-block" href="https://i.imgur.com/6jPQiNB.png" target="_blank">
-  <img src="https://i.imgur.com/6jPQiNB.png" width="300" class="img-fluid" />
+  <img src="https://external-content.duckduckgo.com/iu/?u=https://i.imgur.com/6jPQiNB.png" width="300" class="img-fluid" />
 </a>
 
 ### Complete pack
