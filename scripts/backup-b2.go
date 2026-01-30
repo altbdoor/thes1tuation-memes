@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
@@ -48,13 +49,15 @@ func BackupB2(logger *slog.Logger, path string) {
 		log.Fatalf("unable to init s3 client to b2: %v", err)
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
 	putOptions := minio.PutObjectOptions{
 		ContentType: "application/zip",
 	}
 
 	// upload b2
-	logger.Info("uploading to b2")
+	logger.Info("uploading to b2 (timeout: 30s)")
 	uploadInfo, err := s3Client.FPutObject(ctx, "thes1tuation-memes", "magomet2.zip", tmpAlbumPath, putOptions)
 	if err != nil {
 		log.Fatalf("unable to upload: %v", err)
