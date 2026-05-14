@@ -57,7 +57,7 @@ jobs:
           podman build . --file Dockerfile --tag $JEKYLL_IMG_NAME
           podman save --output $JEKYLL_TAR_NAME $JEKYLL_IMG_NAME
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
         id: pages
 
       - name: Run the Docker image
@@ -80,9 +80,9 @@ jobs:
           tar xzf clean-links-linux.tgz
           ./clean-links run --fix-all ./_site/
 
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: "./_site"
 
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v5
         id: deployment
