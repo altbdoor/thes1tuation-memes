@@ -3,7 +3,7 @@ layout: base
 title: Home
 description: |
   Small archive of the memes I made for the very cool dude,
-  [TheS1tuation](https://www.twitch.tv/thes1tuation/).
+  [TheS1tuation](https://www.twitch.tv/situation/).
 ---
 
 <style>
