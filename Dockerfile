@@ -12,12 +12,14 @@ FROM base AS builder
 WORKDIR /app/
 
 RUN apt-get update -qq \
-    && apt-get install -yqq --no-install-recommends build-essential
+    && apt-get install -yqq --no-install-recommends build-essential \
+    && gem install bundler -v '~> 4.0.0' --no-document
 
 RUN bundle init \
     && echo "gem 'jekyll', '$JEKYLL_VERSION'" >> Gemfile \
     && echo "gem 'minima'" >> Gemfile \
     && echo "gem 'jekyll-paginate-v2'" >> Gemfile \
+    && bundle config set cooldown 14 \
     && bundle install --jobs $(nproc)
 
 # ==========
